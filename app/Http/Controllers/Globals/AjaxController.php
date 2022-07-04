@@ -633,7 +633,7 @@ class AjaxController extends Controller {
     public function fn_post_update_menu(Request $request) {
         $data = $request->json()->all();
         if (isset($data) && !empty($data)) {
-            if ($data['is_delete']) {
+            if (isset($data['is_delete']) && !empty($data['is_delete'])) {
                 $id = (int) base64_decode($data['id']);
                 $response = DB::table('tbl_a_user_menus')->where('id', '=', $id)->delete();
                 if ($response) {

@@ -134,6 +134,19 @@ Route::middleware(['auth'])->group(function ($e) {
                 Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\GroupsPermissionsController@remove')->name('extraweb.prefferences.group_permission.remove');
                 Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\GroupsPermissionsController@delete')->name('extraweb.prefferences.group_permission.delete');
             });
+             Route::prefix('module')->group(function () {
+                Route::get('/', 'App\Http\Controllers\Backend\Prefferences\ModulesController@view')->name('extraweb.prefferences.module.view1');
+                Route::get('/view', 'App\Http\Controllers\Backend\Prefferences\ModulesController@view')->name('extraweb.prefferences.module.view2');
+                Route::post('/get_list', 'App\Http\Controllers\Backend\Prefferences\ModulesController@get_list')->name('extraweb.prefferences.module.get_list');
+                Route::get('/archive', 'App\Http\Controllers\Backend\Prefferences\ModulesController@archive')->name('extraweb.prefferences.module.archive');
+                Route::post('/get_list_archive', 'App\Http\Controllers\Backend\Prefferences\ModulesController@get_list_archive')->name('extraweb.prefferences.module.get_list_archive');
+                Route::get('/create', 'App\Http\Controllers\Backend\Prefferences\ModulesController@create')->name('extraweb.prefferences.module.create');
+                Route::get('/edit/{id}', 'App\Http\Controllers\Backend\Prefferences\ModulesController@edit')->name('extraweb.prefferences.module.edit');
+                Route::post('/update/{id}', 'App\Http\Controllers\Backend\Prefferences\ModulesController@update')->name('extraweb.prefferences.module.update');
+                Route::post('/insert', 'App\Http\Controllers\Backend\Prefferences\ModulesController@insert')->name('extraweb.prefferences.module.insert');
+                Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\ModulesController@remove')->name('extraweb.prefferences.module.remove');
+                Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\ModulesController@delete')->name('extraweb.prefferences.module.delete');
+            });
         });
         Route::prefix('project')->group(function () {
             Route::get('/', 'App\Http\Controllers\Backend\Project\MainController@view')->name('extraweb.project.main.view1');
