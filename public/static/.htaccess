@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+    Header add Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Origin "http://developerasik.local"
+    Header set Access-Control-Allow-Origin "http://extraweb-developerasik.local"
+    Header set Access-Control-Allow-Origin "http://static-developerasik.local"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Credentials "false"
+    Header always set Access-Control-Allow-Headers "x-test-header, Origin, X-Requested-With, Content-Type, Accept"
+
+    <FilesMatch "\.(ttf|otf|eot|woff)$">
+      <IfModule mod_headers.c>
+            Header set Access-Control-Allow-Origin "*"
+      </IfModule>
+    </FilesMatch>
+</IfModule>
