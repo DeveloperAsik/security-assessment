@@ -36,14 +36,14 @@ class UsergroupController extends Controller {
             ],
             [
                 'id' => 2,
-                'title' => 'Permission list',
+                'title' => 'User Group list',
                 'icon' => '',
                 'arrow' => true,
-                'path' => config('app.base_extraweb_uri') . '/prefferences/permission/view'
+                'path' => config('app.base_extraweb_uri') . '/prefferences/user_group/view'
             ],
             [
                 'id' => 3,
-                'title' => 'Permission create new',
+                'title' => 'User Group create new',
                 'icon' => '',
                 'arrow' => false,
                 'path' => '#'
@@ -56,7 +56,6 @@ class UsergroupController extends Controller {
                 ->where('a.is_active', '=', 1)
                 ->orderBy('a.id', 'ASC')
                 ->get();
-        dd($users);
         $groups = Tbl_a_groups::get_all($request)['data'];
         return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', 'users', 'groups'));
     }
@@ -73,10 +72,10 @@ class UsergroupController extends Controller {
             ],
             [
                 'id' => 2,
-                'title' => 'Group Permission',
+                'title' => 'User Group list',
                 'icon' => '',
                 'arrow' => false,
-                'path' => config('app.base_extraweb_uri') . '/prefferences/group_permission/view'
+                'path' => config('app.base_extraweb_uri') . '/prefferences/user_group/view'
             ]
         ];
         return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs'));
@@ -95,17 +94,17 @@ class UsergroupController extends Controller {
             ],
             [
                 'id' => 2,
-                'title' => 'Group Permission',
+                'title' => 'User Group',
                 'icon' => '',
                 'arrow' => true,
-                'path' => config('app.base_extraweb_uri') . '/prefferences/group_permission/view'
+                'path' => config('app.base_extraweb_uri') . '/prefferences/user_group/view'
             ],
             [
                 'id' => 3,
-                'title' => 'Group Permission Edit',
+                'title' => 'User Group Edit',
                 'icon' => '',
                 'arrow' => false,
-                'path' => config('app.base_extraweb_uri') . '/prefferences/group_permission/edit/' . $id
+                'path' => config('app.base_extraweb_uri') . '/prefferences/user_group/edit/' . $id
             ]
         ];
         $group_permission = DB::table('tbl_a_user_groups AS a')
@@ -178,9 +177,9 @@ class UsergroupController extends Controller {
                         'group_name' => $value->group_name,
                         'is_active' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                         'action' => '<div class="btn-group">
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/group_permission/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fas fa-edit"></i></a></button>
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/group_permission/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fas fa-xmark"></i></a></button>
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/group_permission/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Add"><i class="far fa-trash-alt"></i></a></button>
+                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/user_group/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fas fa-edit"></i></a></button>
+                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/user_group/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fas fa-xmark"></i></a></button>
+                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/user_group/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Add"><i class="far fa-trash-alt"></i></a></button>
                       </div>',
                     ];
                 }

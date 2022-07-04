@@ -263,9 +263,9 @@ class AjaxController extends Controller {
             $search = $request['search']['value'];
             if (isset($search) && !empty($search)) {
                 $data = DB::table('tbl_a_group_auth AS a')
-                        ->select('a.*', 'b.id AS permission_id', 'b.title', 'b.path', 'b.controller', 'b.method', 'b.module_id', 'b.is_active AS permission_is_active', 'c.id AS group_id', 'c.title AS group_name', 'd.name AS module_name')
+                        ->select('a.*', 'b.id AS permission_id', 'b.title', 'b.path', 'b.controller', 'b.method', 'b.module_id', 'b.is_active AS permission_is_active', 'c.id AS user_id', 'c.user_name', 'd.first_name','d.last_name','d.email')
                         ->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
-                        ->leftJoin('tbl_a_groups AS c', 'c.id', '=', 'a.group_id')
+                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
                         ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')
                         ->where('b.title', 'like', '%' . $search . '%')
                         ->orWhere('b.path', 'like', '%' . $search . '%')
@@ -276,7 +276,7 @@ class AjaxController extends Controller {
                         ->limit($limit)
                         ->get();
             $total_rows = DB::table('tbl_a_group_auth AS a')->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
-                        ->leftJoin('tbl_a_groups AS c', 'c.id', '=', 'a.group_id')
+                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
                         ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')
                         ->where('b.title', 'like', '%' . $search . '%')
                         ->orWhere('b.path', 'like', '%' . $search . '%')
@@ -284,16 +284,16 @@ class AjaxController extends Controller {
                         ->orWhere('b.method', 'like', '%' . $search . '%')->count();
             } else {
                 $data = DB::table('tbl_a_group_auth AS a')
-                        ->select('a.*', 'b.id AS permission_id', 'b.title', 'b.path', 'b.controller', 'b.method', 'b.module_id', 'b.is_active AS permission_is_active', 'c.id AS group_id', 'c.title AS group_name', 'd.name AS module_name')
+                        ->select('a.*', 'b.id AS permission_id', 'b.title', 'b.path', 'b.controller', 'b.method', 'b.module_id', 'b.is_active AS permission_is_active', 'c.id AS user_id', 'c.title AS group_name', 'd.name AS module_name')
                         ->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
-                        ->leftJoin('tbl_a_groups AS c', 'c.id', '=', 'a.group_id')
+                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
                         ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')
                         ->orderBy('a.id', 'ASC')
                         ->offset($offset)
                         ->limit($limit)
                         ->get();
             $total_rows = DB::table('tbl_a_group_auth AS a') ->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
-                        ->leftJoin('tbl_a_groups AS c', 'c.id', '=', 'a.group_id')
+                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
                         ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')->count();
             }
             if (isset($data) && !empty($data)) {
@@ -408,7 +408,7 @@ class AjaxController extends Controller {
             $offset = ($request->start) ? $request->start : 0;
             $search = $request['search']['value'];
             if (isset($search) && !empty($search)) {
-                $data = DB::table('tbl_a_groups AS a')
+                $data = DB::table('tbl_a_users AS a')
                         ->select('a.*')
                         ->where('a.name', 'like', '%' . $search . '%')
                         ->orderBy('a.id', 'ASC')
@@ -416,14 +416,14 @@ class AjaxController extends Controller {
                         ->limit($limit)
                         ->get();
             } else {
-                $data = DB::table('tbl_a_groups AS a')
+                $data = DB::table('tbl_a_users AS a')
                         ->select('a.*')
                         ->orderBy('a.id', 'ASC')
                         ->offset($offset)
                         ->limit($limit)
                         ->get();
             }
-            $total_rows = DB::table('tbl_a_groups AS a')->count();
+            $total_rows = DB::table('tbl_a_users AS a')->count();
             if (isset($data) && !empty($data)) {
                 $arr = array();
                 foreach ($data AS $keyword => $value) {
@@ -526,9 +526,9 @@ class AjaxController extends Controller {
             $search = $request['search']['value'];
             if (isset($search) && !empty($search)) {
                 $data = DB::table('tbl_user_a_users AS a')
-                        ->select('a.*', 'c.id as group_id', 'c.name as group_name')
+                        ->select('a.*', 'c.id as user_id', 'c.name as group_name')
                         ->leftJoin('tbl_user_b_user_groups AS b', 'b.user_id', '=', 'a.id')
-                        ->leftJoin('tbl_a_groups AS c', 'c.id', '=', 'b.group_id')
+                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'b.user_id')
                         ->where('a.code', 'like', '%' . $search . '%')
                         ->orWhere('a.user_name', 'like', '%' . $search . '%')
                         ->orWhere('a.first_name', 'like', '%' . $search . '%')
@@ -541,9 +541,9 @@ class AjaxController extends Controller {
                         ->get();
             } else {
                 $data = DB::table('tbl_user_a_users AS a')
-                        ->select('a.*', 'c.id as group_id', 'c.name as group_name')
+                        ->select('a.*', 'c.id as user_id', 'c.name as group_name')
                         ->leftJoin('tbl_user_b_user_groups AS b', 'b.user_id', '=', 'a.id')
-                        ->leftJoin('tbl_a_groups AS c', 'c.id', '=', 'b.group_id')
+                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'b.user_id')
                         ->orderBy('a.id', 'ASC')
                         ->offset($offset)
                         ->limit($limit)
@@ -564,7 +564,7 @@ class AjaxController extends Controller {
                         'first_name' => $value->first_name,
                         'last_name' => $value->last_name,
                         'email' => $value->email,
-                        'group_id' => $value->group_id,
+                        'user_id' => $value->user_id,
                         'group_name' => $value->group_name,
                         'is_active' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small">',
                         'action' => '<a href="">edit</a> | <a href="">delete</a> | <a href="">remove</a>'
@@ -728,9 +728,9 @@ class AjaxController extends Controller {
             $search = $request['search']['value'];
             if (isset($search) && !empty($search)) {
                 $data = DB::table('tbl_a_group_auth AS a')
-                        ->select('a.id', 'a.permission_id', 'a.group_id', 'a.is_allowed', 'a.is_public', 'a.is_active', 'b.route_name', 'b.url', 'b.class', 'b.method', 'b.is_active as permission_is_active', 'c.id AS group_id', 'c.name AS group_name')
+                        ->select('a.id', 'a.permission_id', 'a.user_id', 'a.is_allowed', 'a.is_public', 'a.is_active', 'b.route_name', 'b.url', 'b.class', 'b.method', 'b.is_active as permission_is_active', 'c.id AS user_id', 'c.name AS group_name')
                         ->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
-                        ->leftJoin('tbl_a_groups AS c', 'c.id', '=', 'a.group_id')
+                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
                         ->orWhere('b.route_name', 'like', '%' . $search . '%')
                         ->orWhere('b.url', 'like', '%' . $search . '%')
                         ->orWhere('b.class', 'like', '%' . $search . '%')
@@ -742,10 +742,10 @@ class AjaxController extends Controller {
                         ->get();
             } else {
                 $data = DB::table('tbl_a_group_auth AS a')
-                        ->select('a.id', 'a.permission_id', 'a.group_id', 'a.is_allowed', 'a.is_public', 'a.is_active', 'b.route_name', 'b.url', 'b.class', 'b.method', 'b.is_active as permission_is_active', 'c.id AS group_id', 'c.name AS group_name')
+                        ->select('a.id', 'a.permission_id', 'a.user_id', 'a.is_allowed', 'a.is_public', 'a.is_active', 'b.route_name', 'b.url', 'b.class', 'b.method', 'b.is_active as permission_is_active', 'c.id AS user_id', 'c.name AS group_name')
                         ->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
-                        ->leftJoin('tbl_a_groups AS c', 'c.id', '=', 'a.group_id')
-                        ->where('a.group_id', '=', $this->__group_id)
+                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
+                        ->where('a.user_id', '=', $this->__user_id)
                         ->orderBy('a.id', 'ASC')
                         ->offset($offset)
                         ->limit($limit)
@@ -773,7 +773,7 @@ class AjaxController extends Controller {
                         'route_name' => $value->route_name,
                         'class' => $value->class,
                         'method' => $value->method,
-                        'group_id' => $value->group_id,
+                        'user_id' => $value->user_id,
                         'group_name' => $value->group_name,
                         'is_public' => '<input type="checkbox"' . $is_public . ' name="is_public" class="make-switch" data-size="small">',
                         'is_allowed' => '<input type="checkbox"' . $is_allowed . ' name="is_allowed" class="make-switch" data-size="small">',
@@ -888,10 +888,10 @@ class AjaxController extends Controller {
                 ];
                 $result = DB::table('tbl_a_permissions')->insertGetId($params);
                 if ($result) {
-                    $group_permissions = DB::table('tbl_a_group_auth AS a')->where('a.permission_id', '=', $result)->where('a.group_id', '=', $this->__group_id)->first();
+                    $group_permissions = DB::table('tbl_a_group_auth AS a')->where('a.permission_id', '=', $result)->where('a.user_id', '=', $this->__user_id)->first();
                     if ($group_permissions == '' || empty($group_permissions) || $group_permissions == null) {
                         $param_group_permission = [
-                            'group_id' => $this->__group_id,
+                            'user_id' => $this->__user_id,
                             'permission_id' => $result,
                             'is_allowed' => ($data['is_allowed'] == false) ? 1 : 0,
                             'is_public' => ($data['is_public'] == false) ? 1 : 0,

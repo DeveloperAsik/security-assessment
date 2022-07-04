@@ -26,6 +26,7 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Alias</th>
+                                        <th>Rank</th>
                                         <th>Description</th>
                                         <th>Is Active</th>
                                         <th>Action</th>

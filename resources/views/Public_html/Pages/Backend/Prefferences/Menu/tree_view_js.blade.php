@@ -89,7 +89,7 @@ var MenuViewJS = function () {
         var uri = _base_extraweb_uri + '/ajax/get/get-menu?module_id=' + module_id;
         var response = fnAjaxSend({}, uri, "GET", {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, false);
         if (response) {
-            //console.log(response.responseJSON.data);
+            console.log(response.responseJSON.data);
             fnInitTree(response.responseJSON.data, module_id);
         }
     };
@@ -98,7 +98,10 @@ var MenuViewJS = function () {
         init: function () {
             //$.notific8('iyey', {'theme': 'lime', 'sticky': false, 'horizontalEdge': 'top', 'verticalEdge': 'right'});
             fnAlertStr('MenuViewJS successfully load', 'success', {timeOut: 2000});
-            fnGetTreeMenu(1);
+            var module_active = $('a#tab-1.nav-link.active')[0].getAttribute('data-module_id');
+            if (module_active) {
+                fnGetTreeMenu(module_active);
+            }
             $('.nav li a').click(function () {
                 fnGetTreeMenu($(this).attr("data-module_id"));
             });

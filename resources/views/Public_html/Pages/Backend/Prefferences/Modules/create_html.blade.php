@@ -64,7 +64,7 @@
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        <button type="submit" id="submit_form_add_permission" class="btn btn-info">Submit</button>
+                                        <button type="submit" id="submit_form" class="btn btn-info">Submit</button>
                                     </div>
                                     <!-- /.card-footer -->
                                 </form>

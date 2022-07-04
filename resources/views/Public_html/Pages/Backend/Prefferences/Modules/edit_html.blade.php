@@ -52,6 +52,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="rank" class="col-sm-2 control-label">Rank</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" name="rank" class="form-control" id="rank" placeholder="rank" value="{{$modules->rank}}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="description" class="col-sm-2 control-label">Description</label>
                                             <div class="col-sm-10">
                                                 <textarea class="form-control" name="description" id="description" name="description" >{{$modules->description}}</textarea>
@@ -74,7 +80,7 @@
                                     <!-- /.card-body -->
                                     <div class="card-footer">
                                         <input type="text" value="{{$modules->id}}" name="id" hidden />
-                                        <button type="submit" id="submit_form_add_permission" class="btn btn-info">Submit</button>
+                                        <button type="submit" id="submit_form" class="btn btn-info">Submit</button>
                                     </div>
                                     <!-- /.card-footer -->
                                 </form>

@@ -6,7 +6,7 @@
                 fnAlertStr('CreateJS successfully load', 'success', {timeOut: 2000});
                 $('#submit_form').on('click', function (e) {
                     e.preventDefault();
-                    var uri = _base_extraweb_uri + '/prefferences/permission/insert';
+                    var uri = _base_extraweb_uri + '/prefferences/module/insert';
                     var type = 'POST';
                     var formdata = {
                         'action': 'default',

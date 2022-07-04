@@ -31,6 +31,7 @@ var ViewJS = function () {
                     {"data": "id"},
                     {"data": "name"},
                     {"data": "alias"},
+                    {"data": "rank"},
                     {"data": "description"},
                     {"data": "status"},
                     {"data": "action"}

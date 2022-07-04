@@ -9,10 +9,10 @@
                 <div class="card" style="background-color:#fff; color:#000">
                     <div class="card-header">
                         <h3 class="card-title">
-                            Group Permission Lists
+                            User Group Lists
                         </h3>
                         <div class="card-tools">
-                            <a href="/extraweb/prefferences/group_permission/create" class="btn btn-success btn-sm" title="Click this button to add new group permission!">
+                            <a href="{{config('app.base_extraweb_uri')}}/prefferences/user_group/create" class="btn btn-success btn-sm" title="Click this button to add new group permission!">
                                 <i class="fas fa-plus"></i>
                             </a>
                         </div>

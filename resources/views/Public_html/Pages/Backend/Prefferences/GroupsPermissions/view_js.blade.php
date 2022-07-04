@@ -29,8 +29,14 @@ var ViewJS = function () {
                 },
                 "columns": [
                     {"data": "id"},
-                    {"data": "user_name"},
                     {"data": "group_name"},
+                    {"data": "permission_name"},
+                    {"data": "path"},
+                    {"data": "controller"},
+                    {"data": "method"},
+                    {"data": "permission_desc"},
+                    {"data": "is_public"},
+                    {"data": "is_allowed"},
                     {"data": "is_active"},
                     {"data": "action"}
                 ]

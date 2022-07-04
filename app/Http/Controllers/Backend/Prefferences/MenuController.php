@@ -131,7 +131,7 @@ class MenuController extends Controller {
                 'path' => config('app.base_extraweb_uri') . '/menu/tree_view'
             ]
         ];
-        $module = DB::table('tbl_a_modules AS a')->get();
+        $module = DB::table('tbl_a_modules AS a')->orderBy('a.rank','ASC')->get();
         return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', 'module'));
     }
 
@@ -150,10 +150,10 @@ class MenuController extends Controller {
             $search = $request['search']['value'];
             if (isset($search) && !empty($search)) {
                 $data = DB::table('tbl_a_user_menus AS a')
-                        ->select('a.id AS user_menu_id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'b.id', 'b.is_allowed', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS group_id', 'd.title AS group_name')
+                        ->select('a.id AS user_menu_id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'b.id', 'b.is_allowed', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS user_id', 'd.title AS group_name')
                         ->leftJoin('tbl_a_user_menu_access AS b', 'b.user_menu_id', '=', 'a.id')
                         ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
-                        ->leftJoin('tbl_a_groups AS d', 'd.id', '=', 'b.group_id')
+                        ->leftJoin('tbl_a_users AS d', 'd.id', '=', 'b.user_id')
                         ->where('b.url', 'like', '%' . $search . '%')
                         ->orWhere('c.name', 'like', '%' . $search . '%')
                         ->orWhere('b.route', 'like', '%' . $search . '%')
@@ -166,10 +166,10 @@ class MenuController extends Controller {
                         ->get();
             } else {
                 $data = DB::table('tbl_a_user_menus AS a')
-                        ->select('a.id AS user_menu_id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'b.id', 'b.is_allowed', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS group_id', 'd.title AS group_name')
+                        ->select('a.id AS user_menu_id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'b.id', 'b.is_allowed', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS user_id', 'd.title AS group_name')
                         ->leftJoin('tbl_a_user_menu_access AS b', 'b.user_menu_id', '=', 'a.id')
                         ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
-                        ->leftJoin('tbl_a_groups AS d', 'd.id', '=', 'b.group_id')
+                        ->leftJoin('tbl_a_users AS d', 'd.id', '=', 'b.user_id')
                         ->orderBy('a.id', 'ASC')
                         ->offset($offset)
                         ->limit($limit)
@@ -199,7 +199,7 @@ class MenuController extends Controller {
                         'id' => $value->id,
                         'name' => $value->title,
                         'icon' => $value->icon,
-                        'group_id' => $value->group_id,
+                        'user_id' => $value->user_id,
                         'badge' => $value->badge,
                         'badge_value' => $value->badge_value,
                         'path' => $value->path,
@@ -291,7 +291,7 @@ class MenuController extends Controller {
                     if ($c_menu_id) {
                         $param2 = [
                             'user_menu_id' => $c_menu_id,
-                            'group_id' => isset($v) ? $v : 0,
+                            'user_id' => isset($v) ? $v : 0,
                             'is_allowed' => isset($data['is_open']) ? $data['is_open'] : 0,
                             'is_active' => isset($data['is_active']) ? $data['is_active'] : 0,
                             'created_by' => isset($data['created_by']) ? $data['created_by'] : $this->__user_id,
@@ -345,7 +345,7 @@ class MenuController extends Controller {
             $response = DB::table('tbl_a_user_menus')->where('id', '=', (int) $id)->update($update_data);
             if ($response) {
                 $param2 = [
-                    'group_id' => $data->group_id,
+                    'user_id' => $data->user_id,
                     'is_allowed' => $data->is_open,
                     'is_active' => $data->is_active,
                     'updated_by' => $data->updated_by,

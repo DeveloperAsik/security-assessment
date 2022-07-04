@@ -117,71 +117,71 @@ class Tbl_a_user_menus extends MY_Model {
                         ->get();
     }
 
-    public static function get_tree_menu($request, $__group_id, $__module_id) {
+    public static function get_tree_menu($request, $__user_id, $__module_id) {
         $menu = [];
         $menu_exist_1 = DB::table(self::$table_name . ' AS a')
-                ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS group_id', 'd.title AS group_name')
+                ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS user_id', 'd.user_name', 'd.first_name', 'd.last_name', 'd.email')
                 ->leftJoin('tbl_a_user_menu_access AS b', 'b.user_menu_id', '=', 'a.id')
                 ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
-                ->leftJoin('tbl_a_groups AS d', 'd.id', '=', 'b.group_id')
+                ->leftJoin('tbl_a_users AS d', 'd.id', '=', 'b.user_id')
                 ->where('a.level', '=', 1)
                 ->where('a.module_id', '=', $__module_id)
-                ->where('b.group_id', '=', $__group_id)
+                ->where('b.user_id', '=', $__user_id)
                 ->orderBy('a.rank', 'ASC')
                 ->get();
         if (isset($menu_exist_1) && !empty($menu_exist_1)) {
             foreach ($menu_exist_1 AS $keyword => $value) {
                 $menu_exist_2 = DB::table(self::$table_name . ' AS a')
-                        ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS group_id', 'd.title AS group_name')
+                        ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS user_id', 'd.user_name', 'd.first_name', 'd.last_name', 'd.email')
                         ->leftJoin('tbl_a_user_menu_access AS b', 'b.user_menu_id', '=', 'a.id')
                         ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
-                        ->leftJoin('tbl_a_groups AS d', 'd.id', '=', 'b.group_id')
+                        ->leftJoin('tbl_a_users AS d', 'd.id', '=', 'b.user_id')
                         ->where('a.level', '=', 2)
                         ->where('a.parent_id', '=', $value->id)
                         ->where('a.module_id', '=', $__module_id)
-                        ->where('b.group_id', '=', $__group_id)
+                        ->where('b.user_id', '=', $__user_id)
                         ->orderBy('a.rank', 'ASC')
                         ->get();
                 $menu2 = [];
                 if (isset($menu_exist_2) && !empty($menu_exist_2)) {
                     foreach ($menu_exist_2 AS $key => $val) {
                         $menu_exist_3 = DB::table(self::$table_name . ' AS a')
-                                ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS group_id', 'd.title AS group_name')
+                                ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS user_id', 'd.user_name', 'd.first_name', 'd.last_name', 'd.email')
                                 ->leftJoin('tbl_a_user_menu_access AS b', 'b.user_menu_id', '=', 'a.id')
                                 ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
-                                ->leftJoin('tbl_a_groups AS d', 'd.id', '=', 'b.group_id')
+                                ->leftJoin('tbl_a_users AS d', 'd.id', '=', 'b.user_id')
                                 ->where('a.level', '=', 3)
                                 ->where('a.parent_id', '=', $val->id)
                                 ->where('a.module_id', '=', $__module_id)
-                                ->where('b.group_id', '=', $__group_id)
+                                ->where('b.user_id', '=', $__user_id)
                                 ->orderBy('a.rank', 'ASC')
                                 ->get();
                         $menu3 = [];
                         if (isset($menu_exist_3) && !empty($menu_exist_3)) {
                             foreach ($menu_exist_3 AS $k => $v) {
                                 $menu_exist_4 = DB::table(self::$table_name . ' AS a')
-                                        ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS group_id', 'd.title AS group_name')
+                                        ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS user_id', 'd.user_name', 'd.first_name', 'd.last_name', 'd.email')
                                         ->leftJoin('tbl_a_user_menu_access AS b', 'b.user_menu_id', '=', 'a.id')
                                         ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
-                                        ->leftJoin('tbl_a_groups AS d', 'd.id', '=', 'b.group_id')
+                                        ->leftJoin('tbl_a_users AS d', 'd.id', '=', 'b.user_id')
                                         ->where('a.level', '=', 4)
                                         ->where('a.parent_id', '=', $v->id)
                                         ->where('a.module_id', '=', $__module_id)
-                                        ->where('b.group_id', '=', $__group_id)
+                                        ->where('b.user_id', '=', $__user_id)
                                         ->orderBy('a.rank', 'ASC')
                                         ->get();
                                 $menu4 = [];
                                 if (isset($menu_exist_4) && !empty($menu_exist_4)) {
                                     foreach ($menu_exist_4 AS $l => $w) {
                                         $menu_exist_5 = DB::table(self::$table_name . ' AS a')
-                                                ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS group_id', 'd.title AS group_name')
+                                                ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_id', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name', 'd.id AS user_id', 'd.user_name', 'd.first_name', 'd.last_name', 'd.email')
                                                 ->leftJoin('tbl_a_user_menu_access AS b', 'b.user_menu_id', '=', 'a.id')
                                                 ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
-                                                ->leftJoin('tbl_a_groups AS d', 'd.id', '=', 'b.group_id')
+                                                ->leftJoin('tbl_a_users AS d', 'd.id', '=', 'b.user_id')
                                                 ->where('a.level', '=', 5)
                                                 ->where('a.parent_id', '=', $w->id)
                                                 ->where('a.module_id', '=', $__module_id)
-                                                ->where('b.group_id', '=', $__group_id)
+                                                ->where('b.user_id', '=', $__user_id)
                                                 ->orderBy('a.rank', 'ASC')
                                                 ->get();
                                         $menu5 = [];
@@ -199,7 +199,7 @@ class Tbl_a_user_menus extends MY_Model {
                                                     "badge_id" => isset($x->badge_id) ? $x->badge_id : '',
                                                     "badge_value" => isset($x->badge_value) ? $x->badge_value : '',
                                                     "parent_id" => isset($x->parent_id) ? $x->parent_id : 0,
-                                                    "group_id" => $x->group_id,
+                                                    "user_id" => $x->user_id,
                                                     "child" => []
                                                 ];
                                             }
@@ -216,7 +216,7 @@ class Tbl_a_user_menus extends MY_Model {
                                             "badge_id" => isset($w->badge_id) ? $w->badge_id : '',
                                             "badge_value" => isset($w->badge_value) ? $w->badge_value : '',
                                             "parent_id" => isset($w->parent_id) ? $w->parent_id : '',
-                                            "group_id" => $w->group_id,
+                                            "user_id" => $w->user_id,
                                             "child" => $menu5
                                         ];
                                     }
@@ -233,7 +233,7 @@ class Tbl_a_user_menus extends MY_Model {
                                     "badge_id" => isset($v->badge_id) ? $v->badge_id : "",
                                     "badge_value" => isset($v->badge_value) ? $v->badge_value : "",
                                     "parent_id" => isset($v->parent_id) ? $v->parent_id : 0,
-                                    "group_id" => $v->group_id,
+                                    "user_id" => $v->user_id,
                                     "child" => $menu4
                                 ];
                             }
@@ -250,7 +250,7 @@ class Tbl_a_user_menus extends MY_Model {
                             "badge_id" => isset($val->badge_id) ? $val->badge_id : '',
                             "badge_value" => isset($val->badge_value) ? $val->badge_value : '',
                             "parent_id" => isset($val->parent_id) ? $val->parent_id : 0,
-                            "group_id" => $val->group_id,
+                            "user_id" => $val->user_id,
                             "child" => $menu3
                         ];
                     }
@@ -267,7 +267,7 @@ class Tbl_a_user_menus extends MY_Model {
                     "badge_id" => isset($value->badge_id) ? $value->badge_id : '',
                     "badge_value" => isset($value->badge_value) ? $value->badge_value : '',
                     "parent_id" => isset($value->parent_id) ? $value->parent_id : 0,
-                    "group_id" => $value->group_id,
+                    "user_id" => $value->user_id,
                     "child" => $menu2
                 ];
             }

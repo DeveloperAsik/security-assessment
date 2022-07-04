@@ -21,7 +21,7 @@ var ViewJS = function () {
                     processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
                 },
                 "ajax": {
-                    url: _base_extraweb_uri + '/prefferences/group_permission/get_list',
+                    url: _base_extraweb_uri + '/prefferences/user_group/get_list',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -38,7 +38,7 @@ var ViewJS = function () {
             $('#group_permissions').on('click', 'input[type="checkbox"][name="is_active"]', function () {
                 var checked = this.checked;
                 var id = Base64.encode($(this).attr('data-id'));
-                var uri = _base_extraweb_uri + '/prefferences/group_permission/update/' + id;
+                var uri = _base_extraweb_uri + '/prefferences/user_group/update/' + id;
                 var type = 'POST';
                 var formdata = {
                     action: 'is_active',

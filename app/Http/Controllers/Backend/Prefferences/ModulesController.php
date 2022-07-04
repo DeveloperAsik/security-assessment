@@ -39,7 +39,7 @@ class ModulesController extends Controller {
                 'title' => 'Module list',
                 'icon' => '',
                 'arrow' => true,
-                'path' => config('app.base_extraweb_uri') . '/prefferences/permission/view'
+                'path' => config('app.base_extraweb_uri') . '/prefferences/module/view'
             ],
             [
                 'id' => 3,
@@ -69,7 +69,7 @@ class ModulesController extends Controller {
                 'title' => 'Module list',
                 'icon' => '',
                 'arrow' => true,
-                'path' => config('app.base_extraweb_uri') . '/prefferences/permission/view'
+                'path' => config('app.base_extraweb_uri') . '/prefferences/module/view'
             ],
             [
                 'id' => 3,
@@ -147,6 +147,7 @@ class ModulesController extends Controller {
                         'id' => $value->id,
                         'name' => $value->name,
                         'alias' => $value->alias,
+                        'rank' => $value->rank,
                         'description' => $value->description,
                         'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                         'action' => '<div class="btn-group">
@@ -176,7 +177,7 @@ class ModulesController extends Controller {
         $response = false;
         if (isset($data) && !empty($data)) {
             $param = [
-                'title' => $data['title'],
+                'name' => $data['name'],
                 'alias' => $data['alias'],
                 'description' => $data['description'],
                 'is_active' => isset($data['is_active']) ? 1 : 0,
@@ -208,7 +209,7 @@ class ModulesController extends Controller {
                     break;
                 default:
                     $update_data = [
-                        'title' => $data['title'],
+                        'name' => $data['name'],
                         'alias' => $data['alias'],
                         'description' => $data['description'],
                         'is_active' => isset($data['is_active']) ? 1 : 0,

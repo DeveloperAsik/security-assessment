@@ -36,14 +36,14 @@ class GroupsPermissionsController extends Controller {
             ],
             [
                 'id' => 2,
-                'title' => 'Permission list',
+                'title' => 'Group Permission list',
                 'icon' => '',
                 'arrow' => true,
-                'path' => config('app.base_extraweb_uri') . '/prefferences/permission/view'
+                'path' => config('app.base_extraweb_uri') . '/prefferences/group_permission/view'
             ],
             [
                 'id' => 3,
-                'title' => 'Permission create new',
+                'title' => 'Group Permission create new',
                 'icon' => '',
                 'arrow' => false,
                 'path' => '#'
@@ -133,10 +133,11 @@ class GroupsPermissionsController extends Controller {
             $offset = ($request->start) ? $request->start : 0;
             $search = $request['search']['value'];
             if (isset($search) && !empty($search)) {
-                $data = DB::table('tbl_a_user_groups AS a')
-                        ->select('a.*', 'b.id as group_id', 'b.title AS group_name', 'c.id AS user_id', 'c.user_name', 'c.first_name', 'c.last_name', 'c.email')
+                $data = DB::table('tbl_a_group_auth AS a')
+                        ->select('a.*', 'b.id AS group_id', 'b.title AS group_name', 'c.id AS permission_id', 'c.title AS permission_name', 'c.path', 'c.controller', 'c.method', 'c.description AS permission_desc', 'd.id AS module_id', 'd.name AS module_name')
                         ->leftJoin('tbl_a_groups AS b', 'b.id', '=', 'a.group_id')
-                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
+                        ->leftJoin('tbl_a_permissions AS c', 'c.id', '=', 'a.permission_id')
+                        ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'c.module_id')
                         ->where('a.id', '=', $search)
                         ->orWhere('c.title', 'like', '%' . $search . '%')
                         ->orWhere('d.title', 'like', '%' . $search . '%')
@@ -144,38 +145,60 @@ class GroupsPermissionsController extends Controller {
                         ->offset($offset)
                         ->limit($limit)
                         ->get();
-                $total_rows = DB::table('tbl_a_user_groups AS a')
-                                ->select('a.*', 'b.id as group_id', 'b.title AS group_name', 'c.id AS user_id', 'c.user_name', 'c.first_name', 'c.last_name', 'c.email')
+                $total_rows = DB::table('tbl_a_group_auth AS a')
+                                ->select('a.*', 'b.id AS group_id', 'b.title AS group_name', 'c.id AS permission_id', 'c.title AS permission_name', 'c.path', 'c.controller', 'c.method', 'c.description AS permission_desc', 'd.id AS module_id', 'd.name AS module_name')
                                 ->leftJoin('tbl_a_groups AS b', 'b.id', '=', 'a.group_id')
-                                ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
+                                ->leftJoin('tbl_a_permissions AS c', 'c.id', '=', 'a.permission_id')
+                                ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'c.module_id')
                                 ->where('a.id', '=', $search)
                                 ->orWhere('c.title', 'like', '%' . $search . '%')
                                 ->orWhere('d.title', 'like', '%' . $search . '%')->count();
             } else {
-                $data = DB::table('Tbl_a_user_groups AS a')
-                        ->select('a.*', 'b.id as group_id', 'b.title AS group_name', 'c.id AS user_id', 'c.user_name', 'c.first_name', 'c.last_name', 'c.email')
+                $data = DB::table('tbl_a_group_auth AS a')
+                        ->select('a.*', 'b.id AS group_id', 'b.title AS group_name', 'c.id AS permission_id', 'c.title AS permission_name', 'c.path', 'c.controller', 'c.method', 'c.description AS permission_desc', 'd.id AS module_id', 'd.name AS module_name')
                         ->leftJoin('tbl_a_groups AS b', 'b.id', '=', 'a.group_id')
-                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
+                        ->leftJoin('tbl_a_permissions AS c', 'c.id', '=', 'a.permission_id')
+                        ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'c.module_id')
                         ->orderBy('a.id', 'ASC')
                         ->offset($offset)
                         ->limit($limit)
                         ->get();
-                $total_rows = DB::table('Tbl_a_user_groups AS a')->count();
+                $total_rows = DB::table('tbl_a_group_auth AS a')
+                                ->select('a.*', 'b.id AS group_id', 'b.title AS group_name', 'c.id AS permission_id', 'c.title AS permission_name', 'c.path', 'c.controller', 'c.method', 'c.description AS permission_desc', 'd.id AS module_id', 'd.name AS module_name')
+                                ->leftJoin('tbl_a_groups AS b', 'b.id', '=', 'a.group_id')
+                                ->leftJoin('tbl_a_permissions AS c', 'c.id', '=', 'a.permission_id')
+                                ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'c.module_id')->count();
             }
             if (isset($data) && !empty($data)) {
                 $arr = array();
                 foreach ($data AS $keyword => $value) {
+                    $is_public = '';
+                    if ($value->is_public == 1) {
+                        $is_public = ' checked';
+                    }
+                    $is_allowed = '';
+                    if ($value->is_allowed == 1) {
+                        $is_allowed = ' checked';
+                    }
+                    $is_active = '';
+                    if ($value->is_active == 1) {
+                        $is_active = ' checked';
+                    }
                     $is_active = '';
                     if ($value->is_active == 1) {
                         $is_active = ' checked';
                     }
                     $arr[] = [
                         'id' => $value->id,
-                        'user_id' => $value->user_id,
-                        'user_name' => $value->user_name,
-                        'user_email' => $value->email,
-                        'group_id' => $value->group_id,
                         'group_name' => $value->group_name,
+                        'permission_name' => $value->permission_name,
+                        'module_name' => $value->module_name,
+                        'path' => $value->path,
+                        'controller' => $value->controller,
+                        'method' => $value->method,
+                        'permission_desc' => $value->permission_desc,
+                        'is_public' => '<input type="checkbox"' . $is_public . ' name="is_public" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                        'is_allowed' => '<input type="checkbox"' . $is_allowed . ' name="is_allowed" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                         'is_active' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                         'action' => '<div class="btn-group">
                         <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/group_permission/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fas fa-edit"></i></a></button>

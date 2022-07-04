@@ -62,6 +62,15 @@ Route::middleware(['auth'])->group(function ($e) {
         });
 
         Route::prefix('prefferences')->group(function () {
+            Route::prefix('user_group')->group(function () {
+                Route::get('/view', 'App\Http\Controllers\Backend\Prefferences\UsergroupController@view')->name('extraweb.prefferences.users.view_auth');
+                Route::get('/create', 'App\Http\Controllers\Backend\Prefferences\UsergroupController@create')->name('extraweb.prefferences.users.create_auth');
+                Route::post('/get_list', 'App\Http\Controllers\Backend\Prefferences\UsergroupController@get_list')->name('extraweb.prefferences.users.get_list_auth');
+                Route::post('/update/{id}', 'App\Http\Controllers\Backend\Prefferences\UsergroupController@update')->name('extraweb.prefferences.users.update_auth');
+                Route::post('/insert', 'App\Http\Controllers\Backend\Prefferences\UsergroupController@insert')->name('extraweb.prefferences.users.insert_auth');
+                Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\UsergroupController@remove')->name('extraweb.prefferences.users.remove_auth');
+                Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\UsergroupController@delete')->name('extraweb.prefferences.users.delete_auth');
+            });
             Route::prefix('menu')->group(function () {
                 Route::get('/view', 'App\Http\Controllers\Backend\Prefferences\MenuController@view')->name('extraweb.menu.view');
                 Route::get('/create', 'App\Http\Controllers\Backend\Prefferences\MenuController@create')->name('extraweb.menu.create');
@@ -85,15 +94,15 @@ Route::middleware(['auth'])->group(function ($e) {
                 Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@remove')->name('extraweb.prefferences.users.remove');
                 Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@delete')->name('extraweb.prefferences.users.delete');
 
-                Route::prefix('auth')->group(function () {
-                    Route::get('/', 'App\Http\Controllers\Backend\Prefferences\UsersController@view_auth')->name('extraweb.prefferences.users.view_auth');
-                    Route::get('/create', 'App\Http\Controllers\Backend\Prefferences\UsersController@create')->name('extraweb.prefferences.users.create_auth');
-                    Route::post('/get_list', 'App\Http\Controllers\Backend\Prefferences\UsersController@get_list_auth')->name('extraweb.prefferences.users.get_list_auth');
-                    Route::post('/update/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@update_auth')->name('extraweb.prefferences.users.update_auth');
-                    Route::post('/insert', 'App\Http\Controllers\Backend\Prefferences\UsersController@insert_auth')->name('extraweb.prefferences.users.insert_auth');
-                    Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@remove_auth')->name('extraweb.prefferences.users.remove_auth');
-                    Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@delete_auth')->name('extraweb.prefferences.users.delete_auth');
-                });
+                //Route::prefix('auth')->group(function () {
+                //    Route::get('/', 'App\Http\Controllers\Backend\Prefferences\UsersController@view_auth')->name('extraweb.prefferences.users.view_auth');
+                //    Route::get('/create', 'App\Http\Controllers\Backend\Prefferences\UsersController@create')->name('extraweb.prefferences.users.create_auth');
+                //    Route::post('/get_list', 'App\Http\Controllers\Backend\Prefferences\UsersController@get_list_auth')->name('extraweb.prefferences.users.get_list_auth');
+                //    Route::post('/update/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@update_auth')->name('extraweb.prefferences.users.update_auth');
+                //    Route::post('/insert', 'App\Http\Controllers\Backend\Prefferences\UsersController@insert_auth')->name('extraweb.prefferences.users.insert_auth');
+                //    Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@remove_auth')->name('extraweb.prefferences.users.remove_auth');
+                //    Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@delete_auth')->name('extraweb.prefferences.users.delete_auth');
+                //});
             });
             Route::prefix('group')->group(function () {
                 Route::get('/', 'App\Http\Controllers\Backend\Prefferences\GroupsController@view')->name('extraweb.prefferences.group.view1');
@@ -134,7 +143,7 @@ Route::middleware(['auth'])->group(function ($e) {
                 Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\GroupsPermissionsController@remove')->name('extraweb.prefferences.group_permission.remove');
                 Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\GroupsPermissionsController@delete')->name('extraweb.prefferences.group_permission.delete');
             });
-             Route::prefix('module')->group(function () {
+            Route::prefix('module')->group(function () {
                 Route::get('/', 'App\Http\Controllers\Backend\Prefferences\ModulesController@view')->name('extraweb.prefferences.module.view1');
                 Route::get('/view', 'App\Http\Controllers\Backend\Prefferences\ModulesController@view')->name('extraweb.prefferences.module.view2');
                 Route::post('/get_list', 'App\Http\Controllers\Backend\Prefferences\ModulesController@get_list')->name('extraweb.prefferences.module.get_list');

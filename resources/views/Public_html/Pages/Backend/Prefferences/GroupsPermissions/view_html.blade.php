@@ -24,8 +24,14 @@
                                 <thead>
                                     <tr role="row" class="heading">
                                         <th>ID</th>
-                                        <th>User name</th>
-                                        <th>Group Name</th>
+                                        <th>Group</th>
+                                        <th>Permission</th>
+                                        <th>Path</th>
+                                        <th>Controller</th>
+                                        <th>Method</th>
+                                        <th>Description</th>
+                                        <th>Is Public</th>
+                                        <th>Is Allowed</th>
                                         <th>Is Active</th>
                                         <th>Action</th>
                                     </tr>							

@@ -145,8 +145,8 @@ class Controller extends BaseController {
         if($current_module){
             $module_id = $current_module->id;
         }
-        if (isset($this->__group_id) && !empty($this->__group_id)) {
-            $sidebar_menu = Tbl_a_user_menus::get_tree_menu($request, $this->__group_id, $module_id);
+        if (isset($this->__user_id) && !empty($this->__user_id)) {
+            $sidebar_menu = Tbl_a_user_menus::get_tree_menu($request, $this->__user_id, $module_id);
             if (isset($sidebar_menu) && !empty($sidebar_menu)) {
                 View::share('_sidebar_menu', json_decode(json_encode($sidebar_menu)));
             }
