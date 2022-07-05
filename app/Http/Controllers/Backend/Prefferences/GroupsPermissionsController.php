@@ -184,10 +184,6 @@ class GroupsPermissionsController extends Controller {
                     if ($value->is_active == 1) {
                         $is_active = ' checked';
                     }
-                    $is_active = '';
-                    if ($value->is_active == 1) {
-                        $is_active = ' checked';
-                    }
                     $arr[] = [
                         'id' => $value->id,
                         'group_name' => $value->group_name,

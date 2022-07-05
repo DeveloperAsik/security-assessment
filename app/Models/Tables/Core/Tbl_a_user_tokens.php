@@ -25,10 +25,9 @@ class Tbl_a_user_tokens extends MY_Model {
         parent::__construct();
     }
 
-    public function get_by_id($id) {
+    public static function get_by_id($id) {
         $dataExist = DB::table(self::$table_name)->where([
-            ['id', '=', $id],
-            ['is_active', '=', 1]
+            ['id', '=', $id]
         ]);
         $dataExistTotal = $dataExist->count();
         if ($dataExistTotal && $dataExistTotal == 1) {
@@ -39,15 +38,31 @@ class Tbl_a_user_tokens extends MY_Model {
         }
     }
 
-    public static function get_all($request) {
-        $limit = ($request->limit) ? $request->limit : 10;
+    public static function get_all($request, $params = []) {
+        $limit = ($request->limit) ? $request->limit : 1000;
         $offset = ($request->offset) ? $request->offset : 0;
-        $data = DB::table(self::$table_name . ' AS a')
-                ->select('*')
-                ->offset($offset)
-                ->limit($limit)
-                ->orderBy('a.id', 'desc')
-                ->get();
+        $order = 'a.id';
+        $order_type = 'desc';
+        if (isset($params['order']) && !empty($params['order'])) {
+            $order = $params['order']['keyword'];
+            $order_type = $params['order']['type'];
+        }
+        if (isset($params['conditions']) && !empty($params['conditions'])) {
+            $data = DB::table(self::$table_name . ' AS a')
+                    ->select('*')
+                    ->where($params['conditions'])
+                    ->offset($offset)
+                    ->limit($limit)
+                    ->orderBy($order, $order_type)
+                    ->get();
+        } else {
+            $data = DB::table(self::$table_name . ' AS a')
+                    ->select('*')
+                    ->offset($offset)
+                    ->limit($limit)
+                    ->orderBy($order, $order_type)
+                    ->get();
+        }
         if (isset($data) && !empty($data)) {
             $meta = [
                 'total' => DB::table(self::$table_name)->count(),
@@ -63,6 +78,19 @@ class Tbl_a_user_tokens extends MY_Model {
         }
     }
 
+    public static function get_data_by_alias($alias) {
+        $dataExist = DB::table(self::$table_name)->where([
+            ['alias', '=', $alias]
+        ]);
+        $dataExistTotal = $dataExist->count();
+        if ($dataExistTotal && $dataExistTotal == 1) {
+            $dataExistGet = $dataExist->select('*')->first();
+            return $dataExistGet;
+        } else {
+            return null;
+        }
+    }
+
     public static function do_insert($data) {
         return DB::table(self::$table_name)->insert($data);
     }
@@ -72,6 +100,20 @@ class Tbl_a_user_tokens extends MY_Model {
             return null;
         }
         return DB::table(self::$table_name)->where($options['keyword'], $options['value'])->update($data);
+    }
+
+    public static function do_remove($id = null, $data = []) {
+        if (!$data || empty($data)) {
+            return null;
+        }
+        return DB::table(self::$table_name)->where('id', '=', $id)->update($data);
+    }
+
+    public static function do_delete($id = null) {
+        if (!$id || empty($id) || $id == null) {
+            return null;
+        }
+        return DB::table(self::$table_name)->where('id', '=', $id)->delete();
     }
 
 }

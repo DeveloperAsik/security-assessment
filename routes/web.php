@@ -93,6 +93,8 @@ Route::middleware(['auth'])->group(function ($e) {
                 Route::post('/insert', 'App\Http\Controllers\Backend\Prefferences\UsersController@insert')->name('extraweb.prefferences.users.insert');
                 Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@remove')->name('extraweb.prefferences.users.remove');
                 Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\UsersController@delete')->name('extraweb.prefferences.users.delete');
+                Route::post('/get_list_menu', 'App\Http\Controllers\Backend\Prefferences\UsersController@get_list_menu')->name('extraweb.prefferences.users.get_list_menu');
+                Route::post('/get_list_permission', 'App\Http\Controllers\Backend\Prefferences\UsersController@get_list_permission')->name('extraweb.prefferences.users.get_list_permission');
 
                 //Route::prefix('auth')->group(function () {
                 //    Route::get('/', 'App\Http\Controllers\Backend\Prefferences\UsersController@view_auth')->name('extraweb.prefferences.users.view_auth');

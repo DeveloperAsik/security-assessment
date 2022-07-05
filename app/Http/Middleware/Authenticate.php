@@ -83,7 +83,7 @@ class Authenticate {
                 $group_id = $data['_session_group_id'];
                 $getGroupUser = $this->Tbl_a_group_auth->getCurrentGroup($request, $currentPermission, $group_id);
                 //get module detail
-                $getModule = $this->Tbl_a_modules->get_data_by_id($currentPermission->module_id);
+                $getModule = $this->Tbl_a_modules->get_by_id($currentPermission->module_id);
                 $param = [
                     'Permission' => $currentPermission,
                     'GroupUser' => $getGroupUser,

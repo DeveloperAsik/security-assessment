@@ -16,6 +16,7 @@ use App\Models\Tables\Core\Tbl_a_groups;
 use App\Models\Tables\Core\Tbl_a_users;
 use App\Models\Tables\Core\Tbl_a_modules;
 use App\Models\Tables\Core\Tbl_a_permissions;
+use App\Models\Tables\Core\Tbl_a_user_menus;
 
 /**
  * Description of UsersController
@@ -55,11 +56,27 @@ class UsersController extends Controller {
         $groups = Tbl_a_groups::get_all($request)['data'];
         $param_permissions = [
             'conditions' => [
-                ['module_id', '=', 2]
+                ['module_id', '=', 2],
+                ['is_basic', '=', 1]
+            ],
+            'order' => [
+                'keyword' => 'id',
+                'type' => 'ASC'
             ]
         ];
         $permissions = Tbl_a_permissions::get_all($request, $param_permissions)['data'];
-        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', 'modules', 'groups', 'permissions'));
+        $param_menu = [
+            'conditions' => [
+                ['module_id', '=', 2],
+                ['level', '=', 1]
+            ],
+            'order' => [
+                'keyword' => 'rank',
+                'type' => 'ASC'
+            ]
+        ];
+        $menus = Tbl_a_user_menus::get_all($request, $param_menu)['data'];
+        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', 'modules', 'groups', 'permissions', 'menus'));
     }
 
     public function view(Request $request) {
@@ -339,6 +356,168 @@ class UsersController extends Controller {
                         <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/group_user/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fas fa-xmark"></i></a></button>
                         <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/group_user/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Add"><i class="far fa-trash-alt"></i></a></button>
                       </div>',
+                    ];
+                }
+                $output = array(
+                    'draw' => $draw,
+                    'recordsTotal' => $total_rows,
+                    'recordsFiltered' => $total_rows,
+                    'data' => $arr,
+                );
+                echo json_encode($output);
+            } else {
+                echo json_encode(array());
+            }
+        } else {
+            echo json_encode(array());
+        }
+    }
+
+    public function get_list_menu(Request $request) {
+        if (isset($request) && !empty($request)) {
+            $conditions = [['a.module_id', '=', 2]];
+            if (isset($request->type) && $request->type == 'basic') {
+                $conditions = [['a.is_basic', '=', 1], ['a.module_id', '=', 2]];
+            }
+            $draw = $request['draw'];
+            $start = (int) $request['start'];
+            $length = $request['length'];
+            $page = 1;
+            if ($start > 0) {
+                $r = ($start / $length);
+                $page = $r + 1;
+            }
+            $limit = ($request->length) ? $request->length : 10;
+            $offset = ($request->start) ? $request->start : 0;
+            $search = $request['search']['value'];
+            if (isset($search) && !empty($search)) {
+                $data = DB::table('tbl_a_user_menus AS a')
+                        ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name')
+                        ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
+                        ->where($conditions)
+                        ->orWhere('b.url', 'like', '%' . $search . '%')
+                        ->orWhere('c.name', 'like', '%' . $search . '%')
+                        ->orderBy('a.id', 'ASC')
+                        ->offset($offset)
+                        ->limit($limit)
+                        ->get();
+                $total_rows = DB::table('tbl_a_user_menus AS a')
+                                ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
+                                ->leftJoin('tbl_a_users AS d', 'd.id', '=', 'b.user_id')
+                                ->where($conditions)
+                                ->orWhere('b.url', 'like', '%' . $search . '%')
+                                ->orWhere('c.name', 'like', '%' . $search . '%')
+                                ->orderBy('a.id', 'ASC')->count();
+            } else {
+                $data = DB::table('tbl_a_user_menus AS a')
+                        ->select('a.id', 'a.title', 'a.icon', 'a.path', 'a.badge', 'a.badge_value', 'a.level', 'a.rank', 'a.is_badge', 'a.is_open', 'a.is_active', 'c.id AS module_id', 'c.name AS module_name')
+                        ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
+                        ->where($conditions)
+                        ->orderBy('a.id', 'ASC')
+                        ->offset($offset)
+                        ->limit($limit)
+                        ->get();
+                $total_rows = DB::table('tbl_a_user_menus AS a')
+                                ->leftJoin('tbl_a_modules AS c', 'c.id', '=', 'a.module_id')
+                                ->where($conditions)->count();
+            }
+            if (isset($data) && !empty($data)) {
+                $arr = array();
+                foreach ($data AS $keyword => $value) {
+                    $action = '<input type="checkbox" name="is_menu_allowed[]" class="make-switch is_menu_allowed" data-size="small" value="' . base64_encode($value->id) . '">';
+                    if (isset($request->type) && $request->type == 'basic') {
+                        $action = '<input type="checkbox" name="is_menu_allowed[]" class="make-switch is_menu_allowed" checked disabled data-size="small" value="' . base64_encode($value->id) . '">';
+                    }
+                    $arr[] = [
+                        'id' => $value->id,
+                        'name' => $value->title,
+                        'path' => $value->path,
+                        'level' => $value->level,
+                        'rank' => $value->rank,
+                        'module_name' => $value->module_name,
+                        'action' => $action
+                    ];
+                }
+                $output = array(
+                    'draw' => $draw,
+                    'recordsTotal' => $total_rows,
+                    'recordsFiltered' => $total_rows,
+                    'data' => $arr,
+                );
+                echo json_encode($output);
+            } else {
+                echo json_encode(array());
+            }
+        } else {
+            echo json_encode(array());
+        }
+    }
+
+    public function get_list_permission(Request $request) {
+        if (isset($request) && !empty($request)) {
+            $conditions = [['a.is_active', '=', 1], ['a.module_id', '=', 2]];
+            if (isset($request->type) && $request->type == 'basic') {
+                $conditions = [['a.is_basic', '=', 1], ['a.module_id', '=', 2]];
+            }
+            $draw = $request['draw'];
+            $start = (int) $request['start'];
+            $length = $request['length'];
+            $page = 1;
+            if ($start > 0) {
+                $r = ($start / $length);
+                $page = $r + 1;
+            }
+            $limit = ($request->length) ? $request->length : 10;
+            $offset = ($request->start) ? $request->start : 0;
+            $search = $request['search']['value'];
+            if (isset($search) && !empty($search)) {
+                $data = DB::table('tbl_a_permissions AS a')
+                        ->select('a.*', 'b.id AS module_id', 'b.name AS module_name')
+                        ->leftJoin('tbl_a_modules AS b', 'b.id', '=', 'a.module_id')
+                        ->where($conditions)
+                        ->orWhere('a.id', '=', $search)
+                        ->orWhere('a.title', 'like', '%' . $search . '%')
+                        ->orderBy('a.id', 'ASC')
+                        ->offset($offset)
+                        ->limit($limit)
+                        ->get();
+                $total_rows = DB::table('tbl_a_permissions AS a')
+                                ->leftJoin('tbl_a_modules AS b', 'b.id', '=', 'a.module_id')
+                                ->where($conditions)
+                                ->orWhere('a.id', '=', $search)
+                                ->orWhere('a.title', 'like', '%' . $search . '%')->count();
+            } else {
+                $data = DB::table('tbl_a_permissions AS a')
+                        ->select('a.*', 'b.id AS module_id', 'b.name AS module_name')
+                        ->leftJoin('tbl_a_modules AS b', 'b.id', '=', 'a.module_id')
+                        ->where($conditions)
+                        ->orderBy('a.id', 'ASC')
+                        ->offset($offset)
+                        ->limit($limit)
+                        ->get();
+                $total_rows = DB::table('tbl_a_permissions AS a')
+                                ->leftJoin('tbl_a_modules AS b', 'b.id', '=', 'a.module_id')
+                                ->where($conditions)->count();
+            }
+            if (isset($data) && !empty($data)) {
+                $arr = array();
+                foreach ($data AS $keyword => $value) {
+                    $is_active = '';
+                    if ($value->is_active == 1) {
+                        $is_active = ' checked';
+                    }
+                    $action = '<input type="checkbox" name="is_permission_allowed[]" class="make-switch is_permission_allowed" data-size="small" value="' . base64_encode($value->id) . '">';
+                    if (isset($request->type) && $request->type == 'basic') {
+                        $action = '<input type="checkbox" name="is_permission_allowed[]" class="make-switch is_permission_allowed" checked disabled data-size="small" value="' . base64_encode($value->id) . '">';
+                    }
+                    $arr[] = [
+                        'id' => $value->id,
+                        'title' => $value->title,
+                        'path' => $value->path,
+                        'controller' => $value->controller,
+                        'method' => $value->method,
+                        'module_name' => $value->module_name,
+                        'action' => $action
                     ];
                 }
                 $output = array(

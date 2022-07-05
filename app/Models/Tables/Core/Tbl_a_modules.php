@@ -38,15 +38,31 @@ class Tbl_a_modules extends MY_Model {
         }
     }
 
-    public static function get_all($request) {
-        $limit = ($request->limit) ? $request->limit : 10;
+    public static function get_all($request, $params = []) {
+        $limit = ($request->limit) ? $request->limit : 1000;
         $offset = ($request->offset) ? $request->offset : 0;
-        $data = DB::table(self::$table_name . ' AS a')
-                ->select('*')
-                ->offset($offset)
-                ->limit($limit)
-                ->orderBy('a.id', 'desc')
-                ->get();
+        $order = 'a.id';
+        $order_type = 'desc';
+        if (isset($params['order']) && !empty($params['order'])) {
+            $order = $params['order']['keyword'];
+            $order_type = $params['order']['type'];
+        }
+        if (isset($params['conditions']) && !empty($params['conditions'])) {
+            $data = DB::table(self::$table_name . ' AS a')
+                    ->select('*')
+                    ->where($params['conditions'])
+                    ->offset($offset)
+                    ->limit($limit)
+                    ->orderBy($order, $order_type)
+                    ->get();
+        } else {
+            $data = DB::table(self::$table_name . ' AS a')
+                    ->select('*')
+                    ->offset($offset)
+                    ->limit($limit)
+                    ->orderBy($order, $order_type)
+                    ->get();
+        }
         if (isset($data) && !empty($data)) {
             $meta = [
                 'total' => DB::table(self::$table_name)->count(),
@@ -64,8 +80,7 @@ class Tbl_a_modules extends MY_Model {
 
     public static function get_data_by_alias($alias) {
         $dataExist = DB::table(self::$table_name)->where([
-            ['alias', '=', $alias],
-            ['is_active', '=', 1]
+            ['alias', '=', $alias]
         ]);
         $dataExistTotal = $dataExist->count();
         if ($dataExistTotal && $dataExistTotal == 1) {
@@ -87,18 +102,18 @@ class Tbl_a_modules extends MY_Model {
         return DB::table(self::$table_name)->where($options['keyword'], $options['value'])->update($data);
     }
 
-    public static function get_data_by_id($id) {
-        $dataExist = DB::table(self::$table_name)->where([
-            ['id', '=', $id],
-            ['is_active', '=', 1]
-        ]);
-        $dataExistTotal = $dataExist->count();
-        if ($dataExistTotal && $dataExistTotal == 1) {
-            $dataExistGet = $dataExist->select('id', 'name', 'alias', 'is_active')->first();
-            return $dataExistGet;
-        } else {
+    public static function do_remove($id = null, $data = []) {
+        if (!$data || empty($data)) {
             return null;
         }
+        return DB::table(self::$table_name)->where('id', '=', $id)->update($data);
+    }
+
+    public static function do_delete($id = null) {
+        if (!$id || empty($id) || $id == null) {
+            return null;
+        }
+        return DB::table(self::$table_name)->where('id', '=', $id)->delete();
     }
 
 }
