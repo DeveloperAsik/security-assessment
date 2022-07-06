@@ -54,29 +54,29 @@ class UsersController extends Controller {
 
         $modules = Tbl_a_modules::get_all($request)['data'];
         $groups = Tbl_a_groups::get_all($request)['data'];
-        $param_permissions = [
-            'conditions' => [
-                ['module_id', '=', 2],
-                ['is_basic', '=', 1]
-            ],
-            'order' => [
-                'keyword' => 'id',
-                'type' => 'ASC'
-            ]
-        ];
-        $permissions = Tbl_a_permissions::get_all($request, $param_permissions)['data'];
-        $param_menu = [
-            'conditions' => [
-                ['module_id', '=', 2],
-                ['level', '=', 1]
-            ],
-            'order' => [
-                'keyword' => 'rank',
-                'type' => 'ASC'
-            ]
-        ];
-        $menus = Tbl_a_user_menus::get_all($request, $param_menu)['data'];
-        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', 'modules', 'groups', 'permissions', 'menus'));
+        //$param_permissions = [
+        //    'conditions' => [
+        //        ['module_id', '=', 2],
+        //        ['is_basic', '=', 1]
+        //    ],
+        //    'order' => [
+        //        'keyword' => 'id',
+        //        'type' => 'ASC'
+        //    ]
+        //];
+        //$permissions = Tbl_a_permissions::get_all($request, $param_permissions)['data'];
+        //$param_menu = [
+        //    'conditions' => [
+        //        ['module_id', '=', 2],
+        //        ['level', '=', 1]
+        //    ],
+        //    'order' => [
+        //        'keyword' => 'rank',
+        //        'type' => 'ASC'
+        //    ]
+        //];
+        //$menus = Tbl_a_user_menus::get_all($request, $param_menu)['data'];
+        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', 'modules', 'groups'));
     }
 
     public function view(Request $request) {
@@ -201,11 +201,13 @@ class UsersController extends Controller {
         $data = $request->json()->all();
         $response = false;
         if (isset($data) && !empty($data)) {
-            $user_id[] = [
+            dd($data);
+            $user_detail = [
                 'user_name' => $data['user_name'],
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'email' => $data['email'],
+                'password' => '',
                 'description' => $data['description'],
                 'registered_type_id' => 1,
                 'is_active' => $data['is_active'],
@@ -214,8 +216,39 @@ class UsersController extends Controller {
                 'updated_by' => isset($data['created_by']) ? $data['created_by'] : $this->__user_id,
                 'updated_date' => isset($data['created_date']) ? $data['created_date'] : date('Y-m-d H:i:s')
             ];
-            $response = DB::table('tbl_a_users')->insert($user_id);
-            if ($response) {
+            $user_detail_id = DB::table('tbl_a_users')->insert(insertGetId);
+            if ($user_detail_id) {
+                $user_profile = [
+                    'address' => $data['user_name'],
+                    'lat' => $data['first_name'],
+                    'lng' => $data['last_name'],
+                    'zoom' => $data['email'],
+                    'facebook' => $data['user_name'],
+                    'twitter' => $data['first_name'],
+                    'instagram' => $data['last_name'],
+                    'linkedin' => $data['email'],
+                    'photo' => $data['email'],
+                    'last_education' => $data['user_name'],
+                    'last_education_institution' => $data['first_name'],
+                    'skill' => $data['last_name'],
+                    'notes' => $data['email'],
+                    'description' => $data['description'],
+                    'is_active' => $data['is_active'],
+                    'created_by' => isset($data['created_by']) ? $data['created_by'] : $this->__user_id,
+                    'created_date' => isset($data['created_date']) ? $data['created_date'] : date('Y-m-d H:i:s'),
+                    'updated_by' => isset($data['created_by']) ? $data['created_by'] : $this->__user_id,
+                    'updated_date' => isset($data['created_date']) ? $data['created_date'] : date('Y-m-d H:i:s')
+                ];
+                $user_profile_id = DB::table('tbl_a_user_profiles')->insertGetId($user_detail);
+                if($user_profile){
+                    $update_data_user = [
+                        'profile_id' => $user_profile_id,
+                        'updated_by' => isset($data['created_by']) ? $data['created_by'] : $this->__user_id,
+                        'updated_date' => isset($data['created_date']) ? $data['created_date'] : date('Y-m-d H:i:s')
+                    ];
+                    DB::table('tbl_a_users')->where('id', '=', (int) $user_detail_id)->update($update_data_user);
+                }
+                
                 return MyHelper::_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
             } else {
                 return MyHelper::_set_response('json', ['code' => 200, 'message' => 'failed insert data.', 'valid' => false]);

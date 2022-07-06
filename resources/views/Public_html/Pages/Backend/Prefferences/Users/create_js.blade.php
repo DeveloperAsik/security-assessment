@@ -281,6 +281,17 @@ var EditJS = function () {
                 e.preventDefault();
                 var uri = _base_extraweb_uri + '/prefferences/user/insert';
                 var type = 'POST';
+
+                var array_permission = [];
+                var checkboxes = document.querySelectorAll('input[type="checkbox"][name="is_permission_allowed[]"]:checked')
+                for (var i = 0; i < checkboxes.length; i++) {
+                    array_permission.push(checkboxes[i].value);
+                }
+                var array_menu = [];
+                var checkboxes_menu = document.querySelectorAll('input[type="checkbox"][name="is_menu_allowed[]"]:checked')
+                for (var i = 0; i < checkboxes_menu.length; i++) {
+                    array_menu.push(checkboxes_menu[i].value);
+                }
                 var formdata = {
                     'action': 'default',
                     'detail': {
@@ -305,12 +316,12 @@ var EditJS = function () {
                         'notes': $('textarea[name="notes"]').val()
                     },
                     'group': $('select[name="group_id"]').val(),
-                    'permission': $('input[name="is_permission_allowed"]:checked').val(),
-                    'menu': $('input[name="is_menu_allowed"]:checked').val(),
+                    'permission': $('input[name="permission_option"]:checked').val(),
+                    'permission_list': array_permission,
+                    'menu': $('input[name="menu_option"]:checked').val(),
+                    'menu_list': array_menu,
                     'is_active': ($('input[type="checkbox"][name="is_active"]:checked').val()) ? 1 : 0
                 };
-                console.log(formdata);
-                return false;
                 var response = fnAjaxSend(JSON.stringify(formdata), uri, type, {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, false);
                 if (response.responseJSON.status.code == 200) {
                     fnAlertStr(response.responseJSON.status.message, 'success', {timeOut: 2000});

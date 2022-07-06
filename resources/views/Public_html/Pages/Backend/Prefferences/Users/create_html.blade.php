@@ -171,7 +171,7 @@
                                                         <select class="form-control group_multiselect" name="group_id" multiple="multiple">
                                                             @if(isset($groups) && !empty($groups))
                                                             @foreach($groups AS $keyword => $value)
-                                                            <option value="{{$value->id}}">{{$value->title}}</option>
+                                                            <option value="{{base64_encode($value->id)}}">{{$value->title}}</option>
                                                             @endforeach
                                                             @endif
                                                         </select>
