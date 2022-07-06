@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.3
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 06 Jul 2022 pada 08.03
--- Versi server: 10.4.24-MariaDB
--- Versi PHP: 8.1.5
+-- Generation Time: Jul 06, 2022 at 06:34 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tbl_a_user_menus`
+-- Table structure for table `tbl_a_user_menus`
 --
 
 CREATE TABLE `tbl_a_user_menus` (
@@ -45,13 +45,13 @@ CREATE TABLE `tbl_a_user_menus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `tbl_a_user_menus`
+-- Dumping data for table `tbl_a_user_menus`
 --
 
 INSERT INTO `tbl_a_user_menus` (`id`, `title`, `path`, `content_path`, `icon`, `level`, `rank`, `is_badge`, `badge`, `badge_id`, `badge_value`, `module_id`, `parent_id`, `is_basic`, `is_open`, `is_active`, `created_by`, `created_date`, `updated_by`, `updated_date`) VALUES
 (1, 'Projects', '#', '#', '', 1, 1, 1, '', '', '', 2, 0, 1, 1, 1, 3, '2022-06-20 10:18:59', 3, '2022-06-20 10:40:41'),
 (2, 'Penetration Test', '#', '#', '', 1, 3, 1, '', '', '', 2, 0, 0, 1, 1, 3, '2022-06-20 10:36:02', 3, '2022-06-20 10:44:29'),
-(3, 'Prefferences', '#', '#', '', 1, 5, 1, '', '', '', 2, 0, 0, 0, 1, 3, '2022-06-20 10:39:58', 3, '2022-07-06 11:49:02'),
+(3, 'Prefferences', '#', '#', '', 1, 4, 1, '', '', '', 2, 0, 0, 0, 1, 3, '2022-06-20 10:39:58', 3, '2022-06-20 10:50:04'),
 (4, 'Create New', '/project/create', '', '', 2, 1, 1, '', '', '', 2, 1, 1, 1, 1, 3, '2022-06-20 10:40:32', 3, '2022-06-20 15:15:41'),
 (5, 'View', '/project/view', '', '', 2, 2, 1, '', '', '', 2, 1, 1, 1, 1, 3, '2022-06-20 10:40:56', 3, '2022-06-20 15:15:49'),
 (6, 'Archive', '/project/archive', '', '', 2, 3, 1, '', '', '', 2, 1, 1, 1, 1, 3, '2022-06-20 10:41:06', 3, '2022-06-20 15:15:59'),
@@ -66,7 +66,7 @@ INSERT INTO `tbl_a_user_menus` (`id`, `title`, `path`, `content_path`, `icon`, `
 (15, 'Options', '', '', '', 2, 4, 0, '', '', '', 2, 2, 1, 0, 1, 3, '2022-06-20 10:45:14', 3, '2022-06-20 10:45:14'),
 (16, 'User Requester', '/project/penetration-test/requester', '', '', 3, 1, 0, '', '', '', 2, 15, 1, 0, 1, 3, '2022-06-20 10:46:11', 3, '2022-06-21 08:08:06'),
 (17, 'User Vendors', '/project/penetration-test/vendor', '', '', 3, 2, 0, '', '', '', 2, 15, 1, 0, 1, 3, '2022-06-20 10:46:24', 3, '2022-06-21 08:06:27'),
-(18, 'Reports', '', '', '', 0, 6, 0, '', '', '', 2, 0, 1, 0, 1, 3, '2022-06-20 10:49:50', 3, '2022-07-06 11:49:02'),
+(18, 'Reports', '', '', '', 1, 5, 0, '', '', '', 2, 0, 1, 0, 1, 3, '2022-06-20 10:49:50', 3, '2022-06-20 10:49:50'),
 (19, 'User', '', '', '', 2, 1, 0, '', '', '', 2, 3, 0, 0, 1, 3, '2022-06-20 10:50:22', 3, '2022-06-20 10:50:22'),
 (20, 'Groups', '', '', '', 2, 2, 0, '', '', '', 2, 3, 0, 0, 1, 3, '2022-06-20 10:50:26', 3, '2022-06-20 10:50:26'),
 (21, 'Permission', '', '', '', 2, 4, 0, '', '', '', 2, 3, 0, 0, 1, 3, '2022-06-20 10:50:31', 3, '2022-06-20 10:50:31'),
@@ -126,8 +126,10 @@ INSERT INTO `tbl_a_user_menus` (`id`, `title`, `path`, `content_path`, `icon`, `
 (76, 'Risk Mitigations', '', '', '', 2, 2, 0, '', '', '', 2, 74, 0, 0, 1, 3, '2022-07-04 20:32:23', 3, '2022-07-05 08:04:49'),
 (77, 'Authentification Integrity', '', '', '', 2, 3, 0, '', '', '', 2, 74, 0, 0, 1, 3, '2022-07-04 20:32:34', 3, '2022-07-05 08:06:55'),
 (78, 'Options', '', '', '', 2, 4, 0, '', '', '', 2, 74, 0, 0, 1, 3, '2022-07-04 20:32:42', 3, '2022-07-04 20:32:42'),
-(81, 'Review Tahunan', '', '', '', 0, 4, 0, '', '', '', 2, 0, 0, 0, 1, 3, '2022-07-06 09:18:07', 3, '2022-07-06 11:49:02'),
+(80, 'New node', '', '', '', 1, 6, 0, '', '', '', 2, 0, 0, 0, 1, 3, '2022-07-06 09:17:46', 3, '2022-07-06 09:17:46'),
+(81, 'Review Tahunan', '', '', '', 1, 7, 0, '', '', '', 2, 0, 0, 0, 1, 3, '2022-07-06 09:18:07', 3, '2022-07-06 09:18:07'),
 (82, 'All divisi', '', '', '', 2, 1, 0, '', '', '', 2, 81, 0, 0, 1, 3, '2022-07-06 09:19:07', 3, '2022-07-06 09:19:07'),
+(83, 'New node', '', '', '', 1, 8, 0, '', '', '', 2, 0, 0, 0, 1, 3, '2022-07-06 09:19:42', 3, '2022-07-06 09:19:42'),
 (84, 'New node', '', '', '', 3, 2, 0, '', '', '', 2, 75, 0, 0, 1, 3, '2022-07-06 09:23:06', 3, '2022-07-06 09:23:06'),
 (85, 'Approval', '', '', '', 2, 5, 0, '', '', '', 2, 74, 0, 0, 1, 3, '2022-07-06 09:23:32', 3, '2022-07-06 09:23:32');
 
@@ -136,17 +138,17 @@ INSERT INTO `tbl_a_user_menus` (`id`, `title`, `path`, `content_path`, `icon`, `
 --
 
 --
--- Indeks untuk tabel `tbl_a_user_menus`
+-- Indexes for table `tbl_a_user_menus`
 --
 ALTER TABLE `tbl_a_user_menus`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `tbl_a_user_menus`
+-- AUTO_INCREMENT for table `tbl_a_user_menus`
 --
 ALTER TABLE `tbl_a_user_menus`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
