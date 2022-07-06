@@ -652,6 +652,8 @@ class AjaxController extends Controller {
                     $new_parent_menu = DB::table('tbl_a_user_menus AS a')->select('*')->where('a.id', '=', $new_parent_id)->first();
                     $rank = (int) $data['new_position'] + 1;
                     $level = $new_parent_menu->level + 1;
+                }else{
+                    $level = $exist_menu->level - 1;
                 }
                 $param = [
                     'level' => isset($level) ? (int) $level : 1,
