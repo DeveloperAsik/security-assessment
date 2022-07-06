@@ -263,7 +263,7 @@ class AjaxController extends Controller {
             $search = $request['search']['value'];
             if (isset($search) && !empty($search)) {
                 $data = DB::table('tbl_a_group_auth AS a')
-                        ->select('a.*', 'b.id AS permission_id', 'b.title', 'b.path', 'b.controller', 'b.method', 'b.module_id', 'b.is_active AS permission_is_active', 'c.id AS user_id', 'c.user_name', 'd.first_name','d.last_name','d.email')
+                        ->select('a.*', 'b.id AS permission_id', 'b.title', 'b.path', 'b.controller', 'b.method', 'b.module_id', 'b.is_active AS permission_is_active', 'c.id AS user_id', 'c.user_name', 'd.first_name', 'd.last_name', 'd.email')
                         ->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
                         ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
                         ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')
@@ -275,13 +275,13 @@ class AjaxController extends Controller {
                         ->offset($offset)
                         ->limit($limit)
                         ->get();
-            $total_rows = DB::table('tbl_a_group_auth AS a')->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
-                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
-                        ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')
-                        ->where('b.title', 'like', '%' . $search . '%')
-                        ->orWhere('b.path', 'like', '%' . $search . '%')
-                        ->orWhere('b.controller', 'like', '%' . $search . '%')
-                        ->orWhere('b.method', 'like', '%' . $search . '%')->count();
+                $total_rows = DB::table('tbl_a_group_auth AS a')->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
+                                ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
+                                ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')
+                                ->where('b.title', 'like', '%' . $search . '%')
+                                ->orWhere('b.path', 'like', '%' . $search . '%')
+                                ->orWhere('b.controller', 'like', '%' . $search . '%')
+                                ->orWhere('b.method', 'like', '%' . $search . '%')->count();
             } else {
                 $data = DB::table('tbl_a_group_auth AS a')
                         ->select('a.*', 'b.id AS permission_id', 'b.title', 'b.path', 'b.controller', 'b.method', 'b.module_id', 'b.is_active AS permission_is_active', 'c.id AS user_id', 'c.title AS group_name', 'd.name AS module_name')
@@ -292,9 +292,9 @@ class AjaxController extends Controller {
                         ->offset($offset)
                         ->limit($limit)
                         ->get();
-            $total_rows = DB::table('tbl_a_group_auth AS a') ->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
-                        ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
-                        ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')->count();
+                $total_rows = DB::table('tbl_a_group_auth AS a')->leftJoin('tbl_a_permissions AS b', 'b.id', '=', 'a.permission_id')
+                                ->leftJoin('tbl_a_users AS c', 'c.id', '=', 'a.user_id')
+                                ->leftJoin('tbl_a_modules AS d', 'd.id', '=', 'b.module_id')->count();
             }
             if (isset($data) && !empty($data)) {
                 $arr = array();
@@ -640,6 +640,49 @@ class AjaxController extends Controller {
                     return MyHelper::_set_response('json', ['code' => 200, 'message' => 'successfully delete data.', 'valid' => true]);
                 } else {
                     return MyHelper::_set_response('json', ['code' => 200, 'message' => 'failed delete data.', 'valid' => false]);
+                }
+            } elseif (isset($data['is_move']) && !empty($data['is_move'])) {
+                $id = (int) base64_decode($data['id']);
+                $exist_menu = DB::table('tbl_a_user_menus AS a')->select('*')->where('a.id', '=', $id)->first();
+                $rank = (int) $data['new_position'] + 1;
+                $level = $exist_menu->level;
+                $new_parent_id = 0;
+                if (isset($data['new_parent']) && $data['new_parent'] != 'root') {
+                    $new_parent_id = $data['new_parent'];
+                    $new_parent_menu = DB::table('tbl_a_user_menus AS a')->select('*')->where('a.id', '=', $new_parent_id)->first();
+                    $rank = (int) $data['new_position'] + 1;
+                    $level = $new_parent_menu->level + 1;
+                }
+                $param = [
+                    'level' => isset($level) ? (int) $level : 1,
+                    'rank' => isset($rank) ? (int) $rank : 1,
+                    'parent_id' => isset($new_parent_id) ? (int) $new_parent_id : 0,
+                    'updated_by' => $this->__user_id,
+                    'updated_date' => MyHelper::getDateNow()
+                ];
+                $response = DB::table('tbl_a_user_menus')->where('id', '=', (int) $id)->update($param);
+                if ($response) {
+                    $all_menu = DB::table('tbl_a_user_menus AS a')->select('*')->where([['a.parent_id', '=', $new_parent_id], ['a.module_id', '=', 2], ['a.rank', '>=', $rank], ['a.id', '!=', $id]])->orderBy('a.rank', 'ASC')->get();
+                    $total_menu = count($all_menu);
+                    if ($all_menu) {
+                        $arr_new_menu = [];
+                        $i = $rank;
+                        foreach ($all_menu AS $k => $v) {
+                            $i++;
+                            $arr_new_menu = [
+                                'id' => $v->id,
+                                'rank' => $i,
+                                'updated_by' => $this->__user_id,
+                                'updated_date' => MyHelper::getDateNow()
+                            ];
+                            DB::table('tbl_a_user_menus')->where('id', '=', (int) $v->id)->update($arr_new_menu);
+                        }
+                    }
+                }
+                if ($response) {
+                    return MyHelper::_set_response('json', ['code' => 200, 'message' => 'successfully update menu.', 'valid' => true]);
+                } else {
+                    return MyHelper::_set_response('json', ['code' => 200, 'message' => 'failed update menu.', 'valid' => false]);
                 }
             } else {
                 if ($data['parent'] && $data['parent'] == 'root') {

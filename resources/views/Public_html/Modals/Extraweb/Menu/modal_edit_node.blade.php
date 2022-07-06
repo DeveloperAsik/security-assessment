@@ -77,6 +77,15 @@
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <div class="checkbox">
                                             <label>
+                                                <input type="checkbox" name="is_basic" value="1"> Is Basic
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="checkbox">
+                                            <label>
                                                 <input type="checkbox" name="is_badge" value="1"> Is Badge
                                             </label>
                                         </div>

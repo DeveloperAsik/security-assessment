@@ -79,7 +79,24 @@ var MenuViewJS = function () {
             return false;
         });
         $('#tree_' + id).on('move_node.jstree', function (e, data) {
-            console.log('move: ' + data.selected);
+            console.log(data);
+            console.log('move: ' + data.node.id);
+            //return false;
+            var formdata = [];
+            formdata = {
+                'id': Base64.encode(parseInt(data.node.id)),
+                'new_position' : data.position,
+                'new_parent' : data.parent,
+                'is_move': true
+            };
+            var uri = _base_extraweb_uri + '/ajax/post/update-menu';
+            var response = fnAjaxSend(JSON.stringify(formdata), uri, "POST", {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, false);
+            if (response.responseJSON.status.code == 200) {
+                fnAlertStr(response.responseJSON.status.message, 'success', {timeOut: 2000});
+            } else {
+                fnAlertStr(response.responseJSON.status.message, 'error', {timeOut: 2000});
+            }
+            return false;
         });
         $('#tree_' + id).on('copy_node.jstree', function (e, data) {
             console.log('copy: ' + data.selected);
@@ -89,7 +106,6 @@ var MenuViewJS = function () {
         var uri = _base_extraweb_uri + '/ajax/get/get-menu?module_id=' + module_id;
         var response = fnAjaxSend({}, uri, "GET", {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, false);
         if (response) {
-            console.log(response.responseJSON.data);
             fnInitTree(response.responseJSON.data, module_id);
         }
     };
@@ -120,11 +136,13 @@ var MenuViewJS = function () {
                     $('input[name="level"]').val(response.responseJSON.data[0].level);
                     $('input[name="rank"]').val(response.responseJSON.data[0].rank);
 
+                    var is_basic = (response.responseJSON.data[0].is_basic == 1) ? true : false;
+                    $('input[name="is_basic"][type="checkbox"]').prop('checked', is_basic);
                     var is_badge = (response.responseJSON.data[0].is_badge == 1) ? true : false;
-                    var is_open = (response.responseJSON.data[0].is_open == 1) ? true : false;
-                    var is_active = (response.responseJSON.data[0].is_active == 1) ? true : false;
                     $('input[name="is_badge"][type="checkbox"]').prop('checked', is_badge);
+                    var is_open = (response.responseJSON.data[0].is_open == 1) ? true : false;
                     $('input[name="is_open"][type="checkbox"]').prop('checked', is_open);
+                    var is_active = (response.responseJSON.data[0].is_active == 1) ? true : false;
                     $('input[name="is_active"][type="checkbox"]').prop('checked', is_active);
 
                     $('select[name="module"]').val(response.responseJSON.data[0].module_id).change();
