@@ -57,7 +57,7 @@ class GroupPermissionController extends Controller {
             ]
         ];
         $_config = [
-            'title_for_header' => 'Create new <b>Group Permissions</b> master data management page',
+            'title_for_header' => 'Assign <b>Permissions</b> access to <b>Group</b>',
             'create_page' => [
                 'title' => 'click to open user group list page',
                 'icon' => '<i class="fa-solid fa-list"></i>',
@@ -121,7 +121,7 @@ class GroupPermissionController extends Controller {
             ],
             [
                 'id' => 2,
-                'title' => 'Group Permission',
+                'title' => 'Group Permission List',
                 'icon' => '',
                 'arrow' => false,
                 'path' => config('app.base_extraweb_uri') . '/prefferences/group/permissions/view'
@@ -141,7 +141,7 @@ class GroupPermissionController extends Controller {
     public function edit(Request $request, $pr_id = null) {
         $id = base64_decode($pr_id);
         $title_for_layout = config('app.default_variables.title_for_layout');
-        $_breadcrumb = [
+        $_breadcrumbs = [
             [
                 'id' => 1,
                 'title' => 'Dashboard',
@@ -164,21 +164,29 @@ class GroupPermissionController extends Controller {
                 'path' => config('app.base_extraweb_uri') . '/prefferences/group/permissions/edit/' . $id
             ]
         ];
+        $_config = [
+            'title_for_header' => 'Update <b>Permissions</b> access to <b>Group</b>',
+            'create_page' => [
+                'title' => 'click to open user group list page',
+                'icon' => '<i class="fa-solid fa-list"></i>',
+                'link' => config('app.base_extraweb_uri') . '/prefferences/group/permissions/view'
+            ]
+        ];
         $params = [
-            'table_name' => 'tbl_b_user_groups',
-            'from' => 'tbl_b_user_groups as a',
+            'table_name' => $this->table_default,
             'conditions' => [
-                ['a.id', '=', $id]
+                'where' => [
+                    ['a.id', '=', $id]
+                ]
             ],
             'order' => [
                 ['a.id', 'asc']
             ]
         ];
-        $userGroup = $this->MY_Model->find($request, 'all', $params);
+        $userGroup = $this->MY_Model->find($request, 'first', $params);
         $param_group = [
             'table_name' => 'tbl_a_groups',
             'select' => ['a.id', 'a.name', 'a.description', 'a.rank', 'a.is_menu', 'a.is_active', 'b.id AS parent_id', 'b.name AS parent_name'],
-            'from' => 'tbl_a_groups as a',
             'conditions' => [
                 'where' => [
                     ['a.is_menu', '=', 1]
@@ -194,9 +202,8 @@ class GroupPermissionController extends Controller {
             ],
         ];
         $groups = $this->MY_Model->find($request, 'all', $param_group);
-        $param_users = [
-            'table_name' => 'tbl_a_users',
-            'from' => 'tbl_a_users as a',
+        $param_modules = [
+            'table_name' => 'tbl_a_modules',
             'conditions' => [
                 'where' => [
                     ['a.is_active', '=', 1]
@@ -206,8 +213,20 @@ class GroupPermissionController extends Controller {
                 ['a.id', 'asc']
             ]
         ];
-        $users = $this->MY_Model->find($request, 'all', $param_users);
-        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumb', 'userGroup', 'groups', 'users'));
+        $modules = $this->MY_Model->find($request, 'all', $param_modules);
+        $param_permissions = [
+            'table_name' => 'tbl_a_permissions',
+            'conditions' => [
+                'where' => [
+                    ['a.is_active', '=', 1]
+                ]
+            ],
+            'order' => [
+                ['a.id', 'asc']
+            ]
+        ];
+        $permissions = $this->MY_Model->find($request, 'all', $param_permissions);
+        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs','_config', 'userGroup', 'groups', 'modules', 'permissions'));
     }
 
     public function get_list(Request $request) {
@@ -240,7 +259,7 @@ class GroupPermissionController extends Controller {
                     'a.*',
                     'b.name AS group_name',
                     'c.name AS module_name',
-                    'd.name AS permission_name', 'd.path AS permission_path', 'd.controller AS permission_controller'
+                    'd.name AS permission_name', 'd.path AS permission_path', 'd.controller AS permission_controller', 'd.method AS permission_method'
                 ],
                 'join' => [
                     'leftJoin' => [
@@ -281,8 +300,12 @@ class GroupPermissionController extends Controller {
                         'permission_name' => $value->permission_name,
                         'permission_path' => $value->permission_path,
                         'permission_controller' => $value->permission_controller,
+                        'permission_method' => $value->permission_method,
                         'is_allowed' => '<input type="checkbox"' . $is_allowed . ' name="is_allowed" class="make-switch" data-size="small">',
                         'is_active' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small">',
+                        'action' => '<div class="btn-group">
+                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/prefferences/group/permissions/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fas fa-edit"></i></a></button>
+                      </div>',
                     ];
                     if ($i <= $data['meta']['total']) {
                         $i++;
@@ -305,31 +328,35 @@ class GroupPermissionController extends Controller {
         $data = $request->json()->all();
         $response = false;
         if (isset($data) && !empty($data)) {
-            $params = [
-                'table_name' => 'tbl_b_user_groups',
-                'from' => 'tbl_b_user_groups as a',
-                'conditions' => [
-                    'where' => [
-                        ['a.user_id', '=', $data['user']],
-                        ['a.group_id', '=', $data['group']]
-                    ]
-                ]
-            ];
-            $user_exist = $this->MY_Model->find($request, 'first', $params);
-            if (isset($user_exist['data']) && !empty($user_exist['data'])) {
-                return MyHelper::_set_response('json', ['code' => 200, 'message' => 'failed insert data. user already exist or this user group already used.', 'valid' => false]);
-            } else {
-                $user_detail = [
-                    'user_id' => $data['user_id'],
-                    'group_id' => $data['group_id'],
-                    'is_active' => isset($data['is_active']) ? $data['is_active'] : 0,
-                    'created_by' => $this->__user_id,
-                    'created_date' => MyHelper::getDateNow(),
-                    'updated_by' => $this->__user_id,
-                    'updated_date' => MyHelper::getDateNow()
-                ];
-                $response = DB::table('tbl_a_users')->insertGetId($user_detail);
+            $arrDataCorrect = [];
+            if (isset($data['permission_id']) && !empty($data['permission_id'])) {
+                foreach ($data['permission_id'] AS $k => $v) {
+                    $params = [
+                        'table_name' => 'tbl_b_group_permissions',
+                        'conditions' => [
+                            'where' => [
+                                ['a.module_id', '=', $data['module_id']],
+                                ['a.group_id', '=', $data['group_id']],
+                                ['a.permission_id', '=', $data['permission_id']]
+                            ]
+                        ]
+                    ];
+                    $groupPermission_exist = $this->MY_Model->find($request, 'first', $params);
+                    if ($groupPermission_exist['data'] == null) {
+                        $arrDataCorrect[] = [
+                            'module_id' => (int) $data['module_id'],
+                            'group_id' => (int) $data['group_id'],
+                            'permission_id' => (int) $v,
+                            'is_active' => isset($data['is_active']) ? $data['is_active'] : 0,
+                            'created_by' => $this->__user_id,
+                            'created_date' => MyHelper::getDateNow(),
+                            'updated_by' => $this->__user_id,
+                            'updated_date' => MyHelper::getDateNow()
+                        ];
+                    }
+                }
             }
+            $response = DB::table('tbl_b_group_permissions')->insertGetId($arrDataCorrect);
             if ($response) {
                 return MyHelper::_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
             } else {
@@ -343,8 +370,9 @@ class GroupPermissionController extends Controller {
         $id = base64_decode($pr_id);
         if (isset($data) && !empty($data)) {
             $param_group_permission = [
-                'user_id' => $data['user_id'],
-                'group_id' => $data['group_id'],
+                'module_id' => (int) $data['module_id'],
+                'group_id' => (int) $data['group_id'],
+                'permission_id' => (int) $data['permission_id'],
                 'is_active' => isset($data['is_active']) ? $data['is_active'] : 0,
                 'updated_by' => $this->__user_id,
                 'updated_date' => MyHelper::getDateNow(),

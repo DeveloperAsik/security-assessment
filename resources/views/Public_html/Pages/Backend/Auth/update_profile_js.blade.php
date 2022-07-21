@@ -12,7 +12,6 @@ var ProfileUpdateJS = function () {
             fnAlertStr('ProfileUpdateJS successfully load', 'success', {timeOut: 2000});
             $('#skill').summernote();
             $('#notes').summernote();
-
             $('.permissions_multiselect').bootstrapDualListbox();
             var table = $('#group_permissions').DataTable({
                 "sPaginationType": "bootstrap",

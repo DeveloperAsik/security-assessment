@@ -1,8 +1,8 @@
 <!-- JQVMap -->
 <link rel="stylesheet" href="{{config('app.base_assets_uri')}}/templates/adminlte/plugins/jqvmap/jqvmap.min.css">
+<!-- Small boxes (Stat box) -->
 <section class="content">
     <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
         <div class="row">
             <div class="col-lg-3 col-6">
                 <!-- small box -->
@@ -582,6 +582,5 @@
             </section>
             <!-- right col -->
         </div>
-        <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
+    </div>
 </section>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Backend\Master;
+namespace App\Http\Controllers\Backend\Project;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,15 +15,15 @@ use App\Helpers\MyHelper;
 use App\Models\MY_Model;
 
 /**
- * Description of PermissionController
+ * Description of TeamController
  *
- * @author I00396.ARIF
+ * @author User
  */
-class PermissionController extends Controller {
+class TeamController extends Controller {
 
     //put your code here
     protected $MY_Model;
-    protected $table_default = 'tbl_a_permissions';
+    protected $table_default = 'tbl_a_project_teams';
 
     public function __construct(Request $request, MY_Model $MY_Model) {
         parent::__construct($request);
@@ -42,37 +42,28 @@ class PermissionController extends Controller {
             ],
             [
                 'id' => 2,
-                'title' => 'Permission list',
+                'title' => 'Team list',
                 'icon' => '',
                 'arrow' => true,
-                'path' => config('app.base_extraweb_uri') . '/master/permission/view'
+                'path' => config('app.base_extraweb_uri') . '/project/team/view'
             ],
             [
                 'id' => 3,
-                'title' => 'Permission create new',
+                'title' => 'Team create new',
                 'icon' => '',
                 'arrow' => false,
                 'path' => '#'
             ]
         ];
         $_config = [
-            'title_for_header' => 'Create new <b>Permission</b> master data management page',
+            'title_for_header' => 'Create new <b>Team</b> master data management page',
             'create_page' => [
-                'title' => 'click to open permission list page',
+                'title' => 'click to open group list page',
                 'icon' => '<i class="fa-solid fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/permission/view'
+                'link' => config('app.base_extraweb_uri') . '/project/team/view'
             ]
         ];
-        $params = [
-            'table_name' => 'tbl_master_methods',
-            'order' => [
-                ['a.name', 'asc']
-            ],
-            'query_param' => config('app.url') . $request->getRequestUri()
-        ];
-        $methods = $this->MY_Model->find($request, 'list', $params);
-
-        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', '_config', 'methods'));
+        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', '_config'));
     }
 
     public function edit(Request $request, $pr_id = null) {
@@ -88,49 +79,37 @@ class PermissionController extends Controller {
             ],
             [
                 'id' => 2,
-                'title' => 'Permission list',
+                'title' => 'Team list',
                 'icon' => '',
                 'arrow' => true,
-                'path' => config('app.base_extraweb_uri') . '/master/permission/view'
+                'path' => config('app.base_extraweb_uri') . '/project/team/view'
             ],
             [
                 'id' => 3,
-                'title' => 'Permission edit',
+                'title' => 'Team edit',
                 'icon' => '',
                 'arrow' => false,
                 'path' => '#'
             ]
         ];
         $_config = [
-            'title_for_header' => 'Update <b>Permission</b> master data management page',
+            'title_for_header' => 'Update <b>Team</b> master data management page',
             'create_page' => [
-                'title' => 'click to open permission list page',
+                'title' => 'click to open group list page',
                 'icon' => '<i class="fa-solid fa-list"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/permission/view'
+                'link' => config('app.base_extraweb_uri') . '/project/team/view'
             ]
         ];
         $params = [
-            'table_name' => 'tbl_master_methods',
-            'order' => [
-                ['a.name', 'asc']
-            ],
-            'query_param' => config('app.url') . $request->getRequestUri()
-        ];
-        $methods = $this->MY_Model->find($request, 'list', $params);
-        $param_permission = [
             'table_name' => $this->table_default,
             'conditions' => [
                 'where' => [
                     ['a.id', '=', $id]
                 ]
-            ],
-            'order' => [
-                ['a.name', 'asc']
-            ],
-            'query_param' => config('app.url') . $request->getRequestUri()
+            ]
         ];
-        $permission = $this->MY_Model->find($request, 'first', $param_permission);
-        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', '_config', 'methods', 'permission'));
+        $team = $this->MY_Model->find($request, 'first', $params, 'mysql_assessment');
+        return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', '_config', 'team'));
     }
 
     public function view(Request $request) {
@@ -145,18 +124,18 @@ class PermissionController extends Controller {
             ],
             [
                 'id' => 2,
-                'title' => 'Permission list',
+                'title' => 'Team list',
                 'icon' => '',
                 'arrow' => false,
                 'path' => '#'
             ]
         ];
         $_config = [
-            'title_for_header' => '<b>Permission</b> master data management page',
+            'title_for_header' => '<b>Team</b> master data management page',
             'create_page' => [
-                'title' => 'click to open form create new permission',
+                'title' => 'click to open form create new group',
                 'icon' => '<i class="fas fa-square-plus"></i>',
-                'link' => config('app.base_extraweb_uri') . '/master/permission/create'
+                'link' => config('app.base_extraweb_uri') . '/project/team/create'
             ]
         ];
         return view('Public_html.Layouts.Adminlte.dashboard', compact('title_for_layout', '_breadcrumbs', '_config'));
@@ -174,10 +153,10 @@ class PermissionController extends Controller {
             if (isset($search) && !empty($search)) {
                 $conditions = [
                     'orWhere' => [
+                        ['a.code', 'like', '%' . $search . '%'],
                         ['a.name', 'like', '%' . $search . '%'],
-                        ['a.path', 'like', '%' . $search . '%'],
-                        ['a.controller', 'like', '%' . $search . '%'],
-                        ['a.method', 'like', '%' . $search . '%']
+                        ['a.email', 'like', '%' . $search . '%'],
+                        ['a.phone_number', 'like', '%' . $search . '%']
                     ]
                 ];
             } else {
@@ -193,7 +172,7 @@ class PermissionController extends Controller {
                 'offset' => $offset,
                 'query_param' => config('app.url') . $request->getRequestUri()
             ];
-            $data = $this->MY_Model->find($request, 'all', $params);
+            $data = $this->MY_Model->find($request, 'all', $params, 'mysql_assessment');
             if (isset($data['data']) && !empty($data['data'])) {
                 $arrData = array();
                 if ($offset == 0) {
@@ -201,33 +180,24 @@ class PermissionController extends Controller {
                 } else {
                     $i = ($offset + 1);
                 }
+                $pcolor_ = '';
                 foreach ($data['data'] AS $keyword => $value) {
-                    $is_basic = '';
-                    if ($value->is_basic == 1) {
-                        $is_basic = ' checked';
-                    }
-                    $is_public = '';
-                    if ($value->is_public == 1) {
-                        $is_public = ' checked';
-                    }
                     $is_active = '';
                     if ($value->is_active == 1) {
                         $is_active = ' checked';
                     }
                     $arrData[] = [
                         'id' => $i,
+                        'code' => $value->code,
                         'name' => $value->name,
-                        'path' => $value->path,
-                        'controller' => $value->controller,
-                        'method' => $value->method,
-                        'description' => $value->description,
-                        'basic' => '<input type="checkbox"' . $is_basic . ' name="is_basic" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
-                        'public' => '<input type="checkbox"' . $is_public . ' name="is_public" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
+                        'email' => $value->email,
+                        'phone_number' => $value->phone_number,
                         'status' => '<input type="checkbox"' . $is_active . ' name="is_active" class="make-switch" data-size="small" data-id="' . base64_encode($value->id) . '">',
                         'action' => '<div class="btn-group">
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/master/permission/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fas fa-edit"></i></a></button>
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/master/permission/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fas fa-xmark"></i></a></button>
-                        <button type="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/master/permission/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Add"><i class="far fa-trash-alt"></i></a></button>
+                        <button team="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/project/team/edit/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Edit"><i class="fas fa-edit"></i></a></button>
+                        <button team="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/project/team/remove/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Remove"><i class="fas fa-xmark"></i></a></button>
+                        <button team="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/project/team/delete/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="Add"><i class="far fa-trash-alt"></i></a></button>
+                        <button team="button" class="btn btn-info"><a href="' . config('app.base_extraweb_uri') . '/project/team/user/view/' . base64_encode($value->id) . '" style="color:#fff;font-size:14px;" title="View User Team"><i class="fa fa-users"></i></a></button>
                       </div>',
                     ];
                     if ($i <= $data['meta']['total']) {
@@ -253,42 +223,19 @@ class PermissionController extends Controller {
         $data = $request->json()->all();
         $response = false;
         if (isset($data) && !empty($data)) {
-            $arrParam = [];
-            if (isset($data['method']) && !empty($data['method'])) {
-                foreach ($data['method'] AS $key => $value) {
-                    $params = [
-                        'table_name' => 'tbl_master_methods',
-                        'conditions' => [
-                            'where' => [
-                                ['a.name', 'like', '%' . $value . '%']
-                            ]
-                        ],
-                        'order' => [
-                            ['a.id', 'asc']
-                        ]
-                    ];
-                    $exist_method = $this->MY_Model->findOne($request, $params);
-                    $sufix = '';
-                    if (isset($exist_method['data']->param) && !empty($exist_method['data']->param)) {
-                        $sufix = '/' . $exist_method['data']->param;
-                    }
-                    $arrParam[] = [
-                        'name' => $data['name'] . '/' . $value . $sufix,
-                        'path' => $data['path'] . '/' . $value . $sufix,
-                        'controller' => $data['controller'],
-                        'method' => $value,
-                        'description' => $data['description'],
-                        'is_basic' => isset($data['is_basic']) ? 1 : 0,
-                        'is_public' => isset($data['is_public']) ? 1 : 0,
-                        'is_active' => isset($data['is_active']) ? 1 : 0,
-                        'created_by' => $this->__user_id,
-                        'created_date' => MyHelper::getDateNow(),
-                        'updated_by' => $this->__user_id,
-                        'updated_date' => MyHelper::getDateNow()
-                    ];
-                }
-            }
-            $response = DB::table($this->table_default)->insert($arrParam);
+            $param = [
+                'code' => $data['code'],
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'email' => $data['email'],
+                'phone_number' => $data['phone_number'],
+                'is_active' => isset($data['is_active']) ? 1 : 0,
+                'created_by' => $this->__user_id,
+                'created_date' => MyHelper::getDateNow(),
+                'updated_by' => $this->__user_id,
+                'updated_date' => MyHelper::getDateNow()
+            ];
+            $response = DB::Connection('mysql_assessment')->table($this->table_default)->insert($param);
             if ($response) {
                 return MyHelper::_set_response('json', ['code' => 200, 'message' => 'successfully insert data', 'valid' => true]);
             } else {
@@ -302,20 +249,6 @@ class PermissionController extends Controller {
         if (isset($data) && !empty($data)) {
             $id = base64_decode($pr_id);
             switch ($data['action']) {
-                case 'is_basic':
-                    $update_data = [
-                        'is_basic' => $data['is_basic'],
-                        'updated_by' => $this->__user_id,
-                        'updated_date' => MyHelper::getDateNow()
-                    ];
-                    break;
-                case 'is_public':
-                    $update_data = [
-                        'is_public' => $data['is_public'],
-                        'updated_by' => $this->__user_id,
-                        'updated_date' => MyHelper::getDateNow()
-                    ];
-                    break;
                 case 'is_active':
                     $update_data = [
                         'is_active' => $data['is_active'],
@@ -325,20 +258,18 @@ class PermissionController extends Controller {
                     break;
                 default:
                     $update_data = [
+                        'code' => $data['code'],
                         'name' => $data['name'],
-                        'path' => $data['path'],
-                        'controller' => $data['controller'],
-                        'method' => $data['method'],
-                        'description' => isset($data['description']) ? $data['description'] : '-',
-                        'is_basic' => isset($data['is_basic']) ? 1 : 0,
-                        'is_public' => isset($data['is_public']) ? 1 : 0,
+                        'description' => $data['description'],
+                        'email' => $data['email'],
+                        'phone_number' => $data['phone_number'],
                         'is_active' => isset($data['is_active']) ? 1 : 0,
                         'updated_by' => $this->__user_id,
                         'updated_date' => MyHelper::getDateNow()
                     ];
                     break;
             }
-            $response = DB::table($this->table_default)->where('id', '=', (int) $id)->update($update_data);
+            $response = DB::Connection('mysql_assessment')->table($this->table_default)->where('id', '=', (int) $id)->update($update_data);
             if ($response) {
                 return MyHelper::_set_response('json', ['code' => 200, 'message' => 'successfully update data', 'valid' => true]);
             } else {

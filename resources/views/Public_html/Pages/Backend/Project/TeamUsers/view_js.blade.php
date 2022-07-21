@@ -5,7 +5,7 @@
             //main function to initiate the module
             init: function () {
                 fnAlertStr('ViewJS successfully load', 'success', {timeOut: 2000});
-                var table = $('#project_teams').DataTable({
+                var table = $('#project_type').DataTable({
                     "sPaginationType": "bootstrap",
                     "paging": true,
                     "pagingType": "full_numbers",
@@ -15,11 +15,12 @@
                     "cache": false,
                     "processing": true,
                     "lengthChange": true,
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "1000"]],
                     "language": {
                         processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
                     },
                     "ajax": {
-                        url: _base_extraweb_uri + '/project/team/get_list',
+                        url: _base_extraweb_uri + '/project/team/user/get_list?team_id=' + team_id,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -27,18 +28,24 @@
                     },
                     "columns": [
                         {"data": "id"},
+                        {"data": "photo"},
                         {"data": "code"},
-                        {"data": "name"},
+                        {"data": "user_name"},
+                        {"data": "first_name"},
+                        {"data": "last_name"},
                         {"data": "email"},
                         {"data": "phone_number"},
+                        {"data": "team_name"},
+                        {"data": "team_email"},
+                        {"data": "team_phone_number"},
                         {"data": "status"},
                         {"data": "action"}
                     ]
                 });
-                $('#project_teams').on('click', 'input[type="checkbox"][name="is_active"]', function (e) {
+                $('#project_type').on('click', 'input[type="checkbox"][name="is_active"]', function (e) {
                     loadingImg('img-loading', 'start');
                     var checked = this.checked;
-                    var uri = _base_extraweb_uri + '/project/team/update/' + $(this).attr('data-id');
+                    var uri = _base_extraweb_uri + '/master/group/update/' + Base64.encode($(this).attr('data-id'));
                     var type = 'POST';
                     var formdata = {
                         is_active: (checked == true) ? 1 : 0,
@@ -48,12 +55,12 @@
                     if (response.responseJSON.status.code === 200) {
                         setTimeout(function () {
                             loadingImg('img-loading', 'stop');
-                            fnAlertStr(response.responseJSON.status.message, 'success', {timeOut: 2000, withHtml: true});
+                            fnAlertStr(response.responseJSON.status.message, 'success', {timeOut: 2000});
                         }, 1500);
                     } else {
                         setTimeout(function () {
                             loadingImg('img-loading', 'stop');
-                            fnAlertStr(response.responseJSON.status.message, 'error', {timeOut: 2000, withHtml: true});
+                            fnAlertStr(response.responseJSON.status.message, 'error', {timeOut: 2000});
                         }, 1500);
                     }
                 });

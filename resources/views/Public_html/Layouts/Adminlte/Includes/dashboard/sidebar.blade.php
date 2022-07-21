@@ -42,6 +42,9 @@
                                     @endif
                                 </p>
                             </a>
+                            @if(isset($val1->path) && !empty($val1->path))
+                                <a href="{{config('app.base_extraweb_uri') . $val1->path}}" target="__BLANK" style="position: relative;float: right;right: 30px;top: -35px;z-index:9999"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            @endif
                             @if(isset($val1->child) && !empty($val1->child))
                                 @foreach($val1->child AS $key2 => $val2)
                                     <ul class="nav nav-treeview">
@@ -58,6 +61,9 @@
                                                     @endif
                                                 </p>
                                             </a>
+                                            @if(isset($val2->path) && !empty($val2->path))
+                                                <a href="{{config('app.base_extraweb_uri') . $val2->path}}" target="__BLANK" style="position: relative;float: right;right: 30px;top: -35px;z-index:9999"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                            @endif
                                             @if(isset($val2->child) && !empty($val2->child))
                                                 @foreach($val2->child AS $key3 => $val3)
                                                     <ul class="nav nav-treeview">
@@ -74,6 +80,9 @@
                                                                     @endif
                                                                 </p>
                                                             </a>
+                                                            @if(isset($val3->path) && !empty($val3->path))
+                                                                <a href="{{config('app.base_extraweb_uri') . $val3->path}}" target="__BLANK" style="position: relative;float: right;right: 30px;top: -35px;z-index:9999"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                                            @endif
                                                              @if(isset($val3->child) && !empty($val3->child))
                                                                 @foreach($val3->child AS $key4 => $val4)
                                                                     <ul class="nav nav-treeview">
@@ -90,6 +99,9 @@
                                                                                     @endif
                                                                                 </p>
                                                                             </a>
+                                                                            @if(isset($val4->path) && !empty($val4->path))
+                                                                                <a href="{{config('app.base_extraweb_uri') . $val4->path}}" target="__BLANK" style="position: relative;float: right;right: 30px;top: -35px;z-index:9999"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                                                            @endif
                                                                             @if(isset($val4->child) && !empty($val4->child))
                                                                                 @foreach($val4->child AS $key5 => $val5)
                                                                                     <ul class="nav nav-treeview">
@@ -106,6 +118,9 @@
                                                                                                     @endif
                                                                                                 </p>
                                                                                             </a>
+                                                                                            @if(isset($val5->path) && !empty($val5->path))
+                                                                                                <a href="{{config('app.base_extraweb_uri') . $val5->path}}" target="__BLANK" style="position: relative;float: right;right: 30px;top: -35px;z-index:9999"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                                                                            @endif
                                                                                         </li>
                                                                                     </ul>
                                                                                 @endforeach

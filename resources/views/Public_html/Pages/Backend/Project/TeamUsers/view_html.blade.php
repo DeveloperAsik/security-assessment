@@ -1,13 +1,11 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
-<link href="{{config('app.base_assets_uri')}}/templates/metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css">
-
 <section class="content">
     <div class="container-fluid">
         <!-- Info boxes -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="card" style="background-color:#fff; color:#000">
-                     <div class="card-header">
+                    <div class="card-header">
                         <h5>{!! $_config['title_for_header'] !!}</h5>
                         <div class="card-tools">
                             <a href="{!! $_config['create_page']['link'] !!}" class="btn btn-tool" title="{!! $_config['create_page']['title'] !!}">
@@ -21,18 +19,21 @@
                     <div class="card-divider"></div>
                     <div class="card-table">
                         <div class="table-responsive-sm p-3">
-                            <table style="width:100%;background-color:#fff;color:#000; font-size:10px;" class="table table-bordered" id="group_permissions">
+                            <table style="width:100%;background-color:#fff;color:#000; font-size:14px;" class="table table-bordered" id="project_type">
                                 <thead>
                                     <tr role="row" class="heading">
                                         <th>ID</th>
-                                        <th>Group</th>
-                                        <th>Module</th>
-                                        <th>Permission</th>
-                                        <th>Permission Path</th>
-                                        <th>Permission Controller</th>
-                                        <th>Permission Method</th>
-                                        <th>Is Allowed</th>
-                                        <th>Is Active</th>
+                                        <th>Photo</th>
+                                        <th>Code</th>
+                                        <th>User Name</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Number</th>
+                                        <th>Team Name</th>
+                                        <th>Team Email</th>
+                                        <th>Team Phone Number</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>							
                                 </thead>

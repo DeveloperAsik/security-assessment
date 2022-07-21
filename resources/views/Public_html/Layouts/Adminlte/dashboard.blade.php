@@ -20,11 +20,7 @@
                 @include('Public_html.Layouts.Adminlte.Includes.dashboard.content_header')
                 <!-- /.content-header -->
                 <!-- Main content -->
-                <section class="content">
-                    <div class="container-fluid">
-                        @include('Public_html.Components.content')
-                    </div>
-                </section>
+                @include('Public_html.Components.content')
                 <!-- /.content -->
             </div>
             <!-- /.content-wrapper -->

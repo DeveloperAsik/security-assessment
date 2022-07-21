@@ -150,7 +150,7 @@ Route::middleware(['auth'])->group(function ($e) {
                 });
             });
             Route::prefix('group')->group(function () {
-                 Route::prefix('permissions')->group(function () {
+                Route::prefix('permissions')->group(function () {
                     Route::get('/view', 'App\Http\Controllers\Backend\Prefferences\GroupPermissionController@view')->name('extraweb.prefferences.GroupPermissions.view2');
                     Route::post('/get_list', 'App\Http\Controllers\Backend\Prefferences\GroupPermissionController@get_list')->name('extraweb.prefferences.GroupPermissions.view2');
                     Route::get('/create', 'App\Http\Controllers\Backend\Prefferences\GroupPermissionController@create')->name('extraweb.prefferences.GroupPermissions.create');
@@ -160,6 +160,65 @@ Route::middleware(['auth'])->group(function ($e) {
                     Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\GroupPermissionController@remove')->name('extraweb.prefferences.GroupPermissions.remove');
                     Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\GroupPermissionController@delete')->name('extraweb.prefferences.GroupPermissions.delete');
                 });
+            });
+            Route::prefix('menu')->group(function () {
+                Route::prefix('permissions')->group(function () {
+                    Route::get('/view', 'App\Http\Controllers\Backend\Prefferences\MenuPermissionController@view')->name('extraweb.prefferences.MenuPermissions.view2');
+                    Route::post('/get_list', 'App\Http\Controllers\Backend\Prefferences\MenuPermissionController@get_list')->name('extraweb.prefferences.MenuPermissions.view2');
+                    Route::get('/create', 'App\Http\Controllers\Backend\Prefferences\MenuPermissionController@create')->name('extraweb.prefferences.MenuPermissions.create');
+                    Route::get('/edit/{id}', 'App\Http\Controllers\Backend\Prefferences\MenuPermissionController@edit')->name('extraweb.prefferences.MenuPermissions.edit');
+                    Route::post('/update/{id}', 'App\Http\Controllers\Backend\Prefferences\MenuPermissionController@update')->name('extraweb.prefferences.MenuPermissions.update');
+                    Route::post('/insert', 'App\Http\Controllers\Backend\Prefferences\MenuPermissionController@insert')->name('extraweb.prefferences.MenuPermissions.insert');
+                    Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Prefferences\MenuPermissionController@remove')->name('extraweb.prefferences.MenuPermissions.remove');
+                    Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Prefferences\MenuPermissionController@delete')->name('extraweb.prefferences.MenuPermissions.delete');
+                });
+            });
+        });
+        Route::prefix('project')->group(function () {
+            Route::prefix('type')->group(function () {
+                Route::get('/', 'App\Http\Controllers\Backend\Project\TypeController@view')->name('extraweb.Project.Type.view1');
+                Route::get('/view', 'App\Http\Controllers\Backend\Project\TypeController@view')->name('extraweb.Project.Type.view2');
+                Route::post('/get_list', 'App\Http\Controllers\Backend\Project\TypeController@get_list')->name('extraweb.Project.Type.get_list');
+                Route::get('/create', 'App\Http\Controllers\Backend\Project\TypeController@create')->name('extraweb.Project.Type.create');
+                Route::get('/edit/{id}', 'App\Http\Controllers\Backend\Project\TypeController@edit')->name('extraweb.Project.Type.edit');
+                Route::post('/update/{id}', 'App\Http\Controllers\Backend\Project\TypeController@update')->name('extraweb.Project.Type.update');
+                Route::post('/insert', 'App\Http\Controllers\Backend\Project\TypeController@insert')->name('extraweb.Project.Type.insert');
+                Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Project\TypeController@remove')->name('extraweb.Project.Type.remove');
+                Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Project\TypeController@delete')->name('extraweb.Project.Type.delete');
+            });
+            Route::prefix('team')->group(function () {
+                Route::get('/', 'App\Http\Controllers\Backend\Project\TeamController@view')->name('extraweb.Project.Team.view1');
+                Route::get('/view', 'App\Http\Controllers\Backend\Project\TeamController@view')->name('extraweb.Project.Team.view2');
+                Route::post('/get_list', 'App\Http\Controllers\Backend\Project\TeamController@get_list')->name('extraweb.Project.Team.get_list');
+                Route::get('/create', 'App\Http\Controllers\Backend\Project\TeamController@create')->name('extraweb.Project.Team.create');
+                Route::get('/edit/{id}', 'App\Http\Controllers\Backend\Project\TeamController@edit')->name('extraweb.Project.Team.edit');
+                Route::post('/update/{id}', 'App\Http\Controllers\Backend\Project\TeamController@update')->name('extraweb.Project.Team.update');
+                Route::post('/insert', 'App\Http\Controllers\Backend\Project\TeamController@insert')->name('extraweb.Project.Team.insert');
+                Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Project\TeamController@remove')->name('extraweb.Project.Team.remove');
+                Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Project\TeamController@delete')->name('extraweb.Project.Team.delete');
+
+                Route::prefix('user')->group(function () {
+                    Route::get('/', 'App\Http\Controllers\Backend\Project\TeamUsersController@view')->name('extraweb.Project.TeamUsers.view1');
+                    Route::get('/view/{team_id}', 'App\Http\Controllers\Backend\Project\TeamUsersController@view')->name('extraweb.Project.TeamUsers.view2');
+                    Route::post('/get_list', 'App\Http\Controllers\Backend\Project\TeamUsersController@get_list')->name('extraweb.Project.TeamUsers.get_list');
+                    Route::get('/create/{team_id}', 'App\Http\Controllers\Backend\Project\TeamUsersController@create')->name('extraweb.Project.TeamUsers.create');
+                    Route::get('/edit/{id}', 'App\Http\Controllers\Backend\Project\TeamUsersController@edit')->name('extraweb.Project.TeamUsers.edit');
+                    Route::post('/update/{id}', 'App\Http\Controllers\Backend\Project\TeamUsersController@update')->name('extraweb.Project.TeamUsers.update');
+                    Route::post('/insert/{team_id}', 'App\Http\Controllers\Backend\Project\TeamUsersController@insert')->name('extraweb.Project.TeamUsers.insert');
+                    Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Project\TeamUsersController@remove')->name('extraweb.Project.TeamUsers.remove');
+                    Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Project\TeamUsersController@delete')->name('extraweb.Project.TeamUsers.delete');
+                });
+            });
+            Route::prefix('requirement')->group(function () {
+                Route::get('/', 'App\Http\Controllers\Backend\Project\RequirementController@view')->name('extraweb.Project.Team.view1');
+                Route::get('/view', 'App\Http\Controllers\Backend\Project\RequirementController@view')->name('extraweb.Project.Requirement.view2');
+                Route::post('/get_list', 'App\Http\Controllers\Backend\Project\RequirementController@get_list')->name('extraweb.Project.Requirement.get_list');
+                Route::get('/create', 'App\Http\Controllers\Backend\Project\RequirementController@create')->name('extraweb.Project.Requirement.create');
+                Route::get('/edit/{id}', 'App\Http\Controllers\Backend\Project\RequirementController@edit')->name('extraweb.Project.Requirement.edit');
+                Route::post('/update/{id}', 'App\Http\Controllers\Backend\Project\RequirementController@update')->name('extraweb.Project.Requirement.update');
+                Route::post('/insert', 'App\Http\Controllers\Backend\Project\RequirementController@insert')->name('extraweb.Project.Requirement.insert');
+                Route::get('/remove/{id}', 'App\Http\Controllers\Backend\Project\RequirementController@remove')->name('extraweb.Project.Requirement.remove');
+                Route::get('/delete/{id}', 'App\Http\Controllers\Backend\Project\RequirementController@delete')->name('extraweb.Project.Requirement.delete');
             });
         });
     });

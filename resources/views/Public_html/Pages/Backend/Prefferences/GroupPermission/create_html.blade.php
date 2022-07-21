@@ -1,10 +1,12 @@
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="{{config('app.base_assets_uri')}}/templates/adminlte/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 <section class="content">
     <div class="container-fluid">
         <!-- Info boxes -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                     <div class="card-header">
+                    <div class="card-header">
                         <h5>{!! $_config['title_for_header'] !!}</h5>
                         <div class="card-tools">
                             <a href="{!! $_config['create_page']['link'] !!}" class="btn btn-tool" title="{!! $_config['create_page']['title'] !!}">
@@ -22,19 +24,7 @@
                                 <form class="form-horizontal">
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label for="user_id" class="col-sm-2 control-label">Modules</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control" id="user_id" name="user_id">
-                                                    @if(isset($modules['data']) && !empty($modules['data']))
-                                                    @foreach($modules['data'] AS $keyword => $value)
-                                                    <option value="{{$value->id}}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                        </div> 
-                                        <div class="form-group row">
-                                            <label for="group" class="col-sm-2 control-label">Group</label>
+                                            <label for="group_id" class="col-sm-2 control-label">Group</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" name="group_id">
                                                     @if(isset($groups['data']) && !empty($groups['data']))
@@ -45,10 +35,22 @@
                                                 </select>
                                             </div>
                                         </div>
-                                         <div class="form-group row">
-                                            <label for="group" class="col-sm-2 control-label">Permission</label>
+                                        <div class="form-group row">
+                                            <label for="module_id" class="col-sm-2 control-label">Modules</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control" name="group_id">
+                                                <select class="form-control" id="module_id" name="module_id">
+                                                    @if(isset($modules['data']) && !empty($modules['data']))
+                                                    @foreach($modules['data'] AS $keyword => $value)
+                                                    <option value="{{$value->id}}">{{ $value->name }}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div> 
+                                        <div class="form-group row">
+                                            <label for="permission_id" class="col-sm-2 control-label">Permission</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control permissions_multiselect" name="permission_id" multiple="multiple">
                                                     @if(isset($permissions['data']) && !empty($permissions['data']))
                                                     @foreach($permissions['data'] AS $keyword => $value)
                                                     <option value="{{$value->id}}">{{$value->name}}</option>

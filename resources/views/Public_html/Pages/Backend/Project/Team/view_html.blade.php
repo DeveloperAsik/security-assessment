@@ -5,11 +5,11 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card" style="background-color:#fff; color:#000">
-                    <div class="card-header">
-                        <h5>Team Lists</h5>
+                     <div class="card-header">
+                        <h5>{!! $_config['title_for_header'] !!}</h5>
                         <div class="card-tools">
-                            <a href="{{config('app.base_extraweb_uri') . '/project/teams/create'}}" class="btn btn-tool" title="click to open form for create new team">
-                                <i class="fas fa-square-plus"></i>
+                            <a href="{!! $_config['create_page']['link'] !!}" class="btn btn-tool" title="{!! $_config['create_page']['title'] !!}">
+                                {!! $_config['create_page']['icon'] !!}
                             </a>
                             <a type="button" class="btn btn-tool" data-card-widget="collapse" title="minimize window">
                                 <i class="fas fa-minus"></i>
@@ -27,7 +27,6 @@
                                         <th>Title</th>
                                         <th>Email</th>
                                         <th>Phone Number</th>
-                                        <th>Description</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>							

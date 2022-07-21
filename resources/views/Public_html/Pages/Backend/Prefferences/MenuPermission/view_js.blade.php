@@ -22,7 +22,7 @@ var ViewJS = function () {
                     processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
                 },
                 "ajax": {
-                    url: _base_extraweb_uri + '/prefferences/group/permissions/get_list',
+                    url: _base_extraweb_uri + '/prefferences/menu/permissions/get_list',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -30,12 +30,13 @@ var ViewJS = function () {
                 },
                 "columns": [
                     {"data": "id"},
-                    {"data": "group_name"},
+                    {"data": "parent"},
+                    {"data": "menu_name"},
+                    {"data": "menu_path"},
+                    {"data": "menu_content_path"},
+                    {"data": "menu_level"},
                     {"data": "module_name"},
-                    {"data": "permission_name"},
-                    {"data": "permission_path"},
-                    {"data": "permission_controller"},
-                    {"data": "permission_method"},
+                    {"data": "group_name"},
                     {"data": "is_allowed"},
                     {"data": "is_active"},
                     {"data": "action"}

@@ -1,7 +1,8 @@
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="{{config('app.base_assets_uri')}}/templates/adminlte/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 <section class="content">
     <div class="container-fluid">
         <!-- Info boxes -->
-
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -22,53 +23,52 @@
                             <div class="col-md-12">
                                 <form class="form-horizontal">
                                     <div class="card-body">
+                                        
                                         <div class="form-group row">
-                                            <label for="code" class="col-sm-2 control-label">Code</label>
+                                            <label for="group_id" class="col-sm-2 control-label">Group</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="code" class="form-control" value="{{$team['data']->code}}" id="code" placeholder="code">
+                                                <select class="form-control" name="group_id">
+                                                    <option value="0">-- select one --</option>
+                                                    @if(isset($groups['data']) && !empty($groups['data']))
+                                                    @foreach($groups['data'] AS $keyword => $value)
+                                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="name" class="col-sm-2 control-label">Title</label>
+                                            <label for="permission_id" class="col-sm-2 control-label">Menu</label>
+                                            <div class="col-sm-10" id="selPermission"></div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="module_id" class="col-sm-2 control-label">Modules</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="name" class="form-control" value="{{$team['data']->name}}" id="name" placeholder="name">
+                                                <select class="form-control" id="module_id" name="module_id">
+                                                    @if(isset($modules['data']) && !empty($modules['data']))
+                                                    @foreach($modules['data'] AS $keyword => $value)
+                                                    <option value="{{$value->id}}">{{ $value->name }}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div> 
+                                        <div class="form-group row">
+                                            <label for="is_allowed" class="col-sm-2 control-label">Is Allowed </label>
+                                            <div class="col-sm-10">
+                                                 <input type="checkbox" class="checkbox" value="1" name="is_allowed">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="email" class="col-sm-2 control-label">Email</label>
+                                            <label for="module_id" class="col-sm-2 control-label">Is Active </label>
                                             <div class="col-sm-10">
-                                                <input type="email" name="email" class="form-control" value="{{$team['data']->email}}" id="email" placeholder="email">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="phone_number" class="col-sm-2 control-label">Phone Number</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name="phone_number" class="form-control" value="{{$team['data']->phone_number}}" id="phone_number" placeholder="phone_number">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="description" class="col-sm-2 control-label">description</label>
-                                            <div class="col-sm-10">
-                                                <textarea class="form-control" name="description" id="description" name="description" >{{$team['data']->description}}</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="is_active" class="col-sm-2 control-label">Is Active</label>
-                                            <div class="col-sm-10">
-                                                @if($team['data']->is_active == 1)
-                                                @php $checked = ' checked'; @endphp
-                                                @else
-                                                @php $checked = '';@endphp
-                                                @endif
-                                                <input type="checkbox" name="check" data-id="{{ base64_encode($team['data']->id)}}" value="is_active"{{$checked}}> 
+                                                 <input type="checkbox" class="checkbox" value="1" name="is_active">
                                             </div>
                                         </div>
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        <input type="text" name="id" value="{{ base64_encode($team['data']->id)}}" hidden/>
-                                        <button type="submit" id="submit_form_edit" class="btn btn-info">Submit</button>
-                                        <button type="submit" id="close_form_edit" class="btn btn-default float-right">Cancel</button>
+                                        <button type="submit" id="submit_form_add" class="btn btn-info">Submit</button>
                                     </div>
                                     <!-- /.card-footer -->
                                 </form>

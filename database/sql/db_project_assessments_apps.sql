@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 19 Jul 2022 pada 03.52
+-- Waktu pembuatan: 21 Jul 2022 pada 06.20
 -- Versi server: 10.4.24-MariaDB
 -- Versi PHP: 8.1.5
 
@@ -118,7 +118,7 @@ CREATE TABLE `tbl_a_project_teams` (
 --
 
 INSERT INTO `tbl_a_project_teams` (`id`, `code`, `name`, `description`, `email`, `phone_number`, `is_active`, `created_by`, `created_date`, `updated_by`, `updated_date`) VALUES
-(1, '001', 'Authors', 'Menara BNI jalan pejompongan lantai 14', 'authors@bni.co.id', '02123232345', 1, 3, '2022-06-29 07:26:59', 3, '2022-06-29 07:52:41'),
+(1, '001', 'Authors', 'Menara BNI jalan pejompongan lantai 14', 'authors@bni.co.id', '02123232345', 1, 3, '2022-06-29 07:26:59', 2, '2022-07-20 08:30:44'),
 (2, '002', 'ISU-ISB', '-', 'isu-isb@bni.co.id', '021321321321', 1, 3, '2022-06-29 07:54:30', 3, '2022-06-29 07:54:30'),
 (3, '003', 'Developer Apps', '', 'dev-apps@bni.co.id', '02132183', 1, 3, '2022-06-29 08:21:47', 3, '2022-06-29 08:21:47'),
 (4, '004', 'Developer Web', '', 'dev-web@bni.co.id', '02132123', 1, 3, '2022-06-29 08:22:05', 3, '2022-06-29 08:22:05'),
@@ -134,11 +134,12 @@ INSERT INTO `tbl_a_project_teams` (`id`, `code`, `name`, `description`, `email`,
 CREATE TABLE `tbl_a_project_team_users` (
   `id` int(32) NOT NULL,
   `code` varchar(32) NOT NULL,
+  `user_name` varchar(255) NOT NULL,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(155) NOT NULL,
   `email_address` varchar(255) NOT NULL,
   `photo` varchar(255) NOT NULL,
-  `mobile_phone_number` varchar(16) NOT NULL,
+  `phone_number` varchar(16) NOT NULL,
   `team_id` int(32) NOT NULL,
   `is_logged_in` tinyint(1) NOT NULL DEFAULT 0,
   `is_active` tinyint(1) NOT NULL DEFAULT 0,
@@ -170,9 +171,9 @@ CREATE TABLE `tbl_a_project_types` (
 --
 
 INSERT INTO `tbl_a_project_types` (`id`, `name`, `description`, `is_active`, `created_by`, `created_date`, `updated_by`, `updated_date`) VALUES
-(1, 'websites', '-', 1, 1, '2022-06-20 05:31:11', 3, '2022-06-29 02:31:52'),
+(1, 'website', '-', 1, 1, '2022-06-20 05:31:11', 2, '2022-07-20 01:10:04'),
 (2, 'restapi', '-', 1, 1, '2022-06-20 05:31:11', 1, '2022-06-20 05:31:11'),
-(3, 'apps - android', '-', 1, 1, '2022-06-20 05:31:11', 1, '2022-06-20 05:31:11'),
+(3, 'apps - android', '-', 1, 1, '2022-06-20 05:31:11', 2, '2022-07-19 09:45:12'),
 (4, 'apps - ios', '-', 1, 1, '2022-06-20 05:31:11', 1, '2022-06-20 05:31:11');
 
 -- --------------------------------------------------------

@@ -23,13 +23,14 @@
                             <div class="col-md-12">
                                 <form class="form-horizontal">
                                     <div class="card-body">
+                                        
                                         <div class="form-group row">
                                             <label for="group_id" class="col-sm-2 control-label">Group</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control" name="group_id">
+                                                <select class="form-control" name="group_id" disabled>
                                                     @if(isset($groups['data']) && !empty($groups['data']))
-                                                        @foreach($groups['data'] AS $keyword => $value)
-                                                            @if($userGroup['data']->group_id == $value->id) 
+                                                        @foreach($groups['data'] AS $keyword => $value) 
+                                                            @if($userMenu['data']->group_id == $value->id) 
                                                                 <option value="{{$value->id}}" selected>{{$value->name}}</option>
                                                             @else
                                                                 <option value="{{$value->id}}">{{$value->name}}</option>
@@ -40,12 +41,30 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="menu_id" class="col-sm-2 control-label">Menu</label>
+                                            <div class="col-sm-10" >
+                                               @if(isset($userMenu['data']->menu_name) && !empty($userMenu['data']->menu_name))
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="btn btn-danger" id="changeInToSel">Click to change value</button>
+                                                    </div>
+                                                    <!-- /btn-group -->
+                                                    @php $parent_name = isset($userMenu['data']->parent_menu_name) ? $userMenu['data']->parent_menu_name : 'root'; @endphp
+                                                    <input name="menu_id" type="text" class="form-control" value="{{$parent_name .' - '.$userMenu['data']->menu_name}}" title="click to change" readonly />
+                                                </div>
+                                                <input value="{{$userMenu['data']->id}}" name="menu_id" hidden>
+                                                </select>
+                                               @endif
+                                               <div id="selPermission"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="module_id" class="col-sm-2 control-label">Modules</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" id="module_id" name="module_id">
                                                     @if(isset($modules['data']) && !empty($modules['data']))
                                                         @foreach($modules['data'] AS $keyword => $value)
-                                                            @if($userGroup['data']->module_id == $value->id) 
+                                                            @if($userMenu['data']->module_id == $value->id) 
                                                                 <option value="{{$value->id}}" selected>{{$value->name}}</option>
                                                             @else
                                                                 <option value="{{$value->id}}">{{$value->name}}</option>
@@ -55,27 +74,24 @@
                                                 </select>
                                             </div>
                                         </div> 
-                                        <div class="form-group row">
-                                            <label for="permission_id" class="col-sm-2 control-label">Permission</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control permissions_multiselect" name="permission_id" multiple="multiple">
-                                                    @if(isset($permissions['data']) && !empty($permissions['data']))
-                                                        @foreach($permissions['data'] AS $keyword => $value)
-                                                            @if($userGroup['data']->permission_id == $value->id) 
-                                                                <option value="{{$value->id}}" selected>{{$value->name}}</option>
-                                                            @else
-                                                                <option value="{{$value->id}}">{{$value->name}}</option>
-                                                            @endif
-                                                        @endforeach
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <div class="checkbox">
+                                                    @php $is_allowed = ''; $is_active_value = 0;@endphp
+                                                    @if ($userMenu['data']->is_allowed == 1) 
+                                                        @php $is_allowed = ' checked'; $is_allowed_value = 1;@endphp
                                                     @endif
-                                                </select>
+                                                    <label>
+                                                        <input type="checkbox"{{$is_allowed}} value="{{$is_allowed_value}}" name="is_allowed"> Is Allowed 
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <div class="checkbox">
                                                     @php $is_active = ''; $is_active_value = 0;@endphp
-                                                    @if ($userGroup['data']->is_active == 1) 
+                                                    @if ($userMenu['data']->is_active == 1) 
                                                         @php $is_active = ' checked'; $is_active_value = 1;@endphp
                                                     @endif
                                                     <label>
@@ -87,7 +103,6 @@
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        <input type="text" name="id" value="{{ base64_encode($userGroup['data']->id)}}" hidden/>
                                         <button type="submit" id="submit_form_add" class="btn btn-info">Submit</button>
                                     </div>
                                     <!-- /.card-footer -->

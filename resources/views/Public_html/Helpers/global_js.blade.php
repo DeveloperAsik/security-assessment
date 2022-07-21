@@ -85,6 +85,48 @@
                     break;
             }
             console.log('%c log: ' + string, color);
+            if(opt.withHtml == true){
+                fnAlertHtml(string, type);
+            }
+        }
+    };
+    var fnAlertHtml = function(msg, type, options){
+        var strHtml = '<div class="row"><div class="col-md-12">';
+        switch(type){
+            case 'success':
+                strHtml = strHtml + '<div id="alert_info" class="alert alert-success alert-dismissible">';
+                strHtml = strHtml + '  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
+                strHtml = strHtml + '  <h5><i class="icon fas fa-check"></i> Alert!</h5>';
+                strHtml = strHtml + msg;
+                strHtml = strHtml + '</div>';
+                break;
+            case 'error':
+                strHtml = strHtml + '<div id="alert_info" class="alert alert-danger alert-dismissible">';
+                strHtml = strHtml + '  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
+                strHtml = strHtml + '  <h5><i class="icon fas fa-ban"></i> Alert!</h5>';
+                strHtml = strHtml + msg;
+                strHtml = strHtml + '</div>';
+            break;
+            case 'warning':
+                strHtml = strHtml + '<div id="alert_info" class="alert alert-warning alert-dismissible">';
+                strHtml = strHtml + '  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
+                strHtml = strHtml + '  <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>';
+                strHtml = strHtml + msg;
+                strHtml = strHtml + '</div>';
+                break;
+            default : 
+                strHtml = strHtml + '<div id="alert_info" class="alert alert-info alert-dismissible">';
+                strHtml = strHtml + '  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
+                strHtml = strHtml + '  <h5><i class="icon fas fa-info"></i> Alert!</h5>';
+                strHtml = strHtml + msg;
+                strHtml = strHtml + '</div>';
+                break;
+        }
+        strHtml = strHtml + '</div></div>';
+        if(options && options['element']){
+             $(el).append(strHtml);
+        }else{
+            $('.content-header > .container-fluid').append(strHtml);
         }
     };
     var fnSetSleep = function (ms) {

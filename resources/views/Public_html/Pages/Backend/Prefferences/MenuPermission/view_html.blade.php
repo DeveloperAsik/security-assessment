@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
 <link href="{{config('app.base_assets_uri')}}/templates/metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css">
-
 <section class="content">
     <div class="container-fluid">
         <!-- Info boxes -->
@@ -25,12 +24,13 @@
                                 <thead>
                                     <tr role="row" class="heading">
                                         <th>ID</th>
-                                        <th>Group</th>
-                                        <th>Module</th>
-                                        <th>Permission</th>
-                                        <th>Permission Path</th>
-                                        <th>Permission Controller</th>
-                                        <th>Permission Method</th>
+                                        <th>Parent</th>
+                                        <th>menu_name</th>
+                                        <th>menu_path</th>
+                                        <th>menu_content_path</th>
+                                        <th>menu_level</th>
+                                        <th>module_name</th>
+                                        <th>group_name</th>
                                         <th>Is Allowed</th>
                                         <th>Is Active</th>
                                         <th>Action</th>

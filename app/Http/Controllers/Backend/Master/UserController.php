@@ -531,9 +531,9 @@ class UserController extends Controller {
                     'updated_by' => $this->__user_id,
                     'updated_date' => MyHelper::getDateNow()
                 ];
-                $user_detail_id = DB::table('tbl_a_users')->insertGetId($user_detail);
+                $user_id = DB::table('tbl_a_users')->insertGetId($user_detail);
             }
-            if ($user_detail_id && $profile_id == 0) {
+            if ($user_id && $profile_id == 0) {
                 $user_profile = [
                     'address' => $data['profile']['address'],
                     'lat' => $data['profile']['lat'],
@@ -566,7 +566,7 @@ class UserController extends Controller {
 
                     if ($data['group']) {
                         $insert_user_group = [
-                            'user_id' => $user_profile_id,
+                            'user_id' => $user_id,
                             'group_id' => $data['group'],
                             'updated_by' => $this->__user_id,
                             'updated_date' => MyHelper::getDateNow()

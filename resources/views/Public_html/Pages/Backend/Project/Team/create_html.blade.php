@@ -16,11 +16,14 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Create new team</h5>
+                        <h5>{!! $_config['title_for_header'] !!}</h5>
                         <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <a href="{!! $_config['create_page']['link'] !!}" class="btn btn-tool" title="{!! $_config['create_page']['title'] !!}">
+                                {!! $_config['create_page']['icon'] !!}
+                            </a>
+                            <a type="button" class="btn btn-tool" data-card-widget="collapse" title="minimize window">
                                 <i class="fas fa-minus"></i>
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -36,7 +39,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="name" class="col-sm-2 control-label">Title</label>
+                                            <label for="name" class="col-sm-2 control-label">Name</label>
                                             <div class="col-sm-10">
                                                 <input type="text" name="name" class="form-control" id="name" placeholder="name">
                                             </div>

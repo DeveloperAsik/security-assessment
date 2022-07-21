@@ -4,7 +4,6 @@
             //main function to initiate the module
             init: function () {
                 fnAlertStr('EditJS successfully load', 'success', {timeOut: 2000});
-
                 $('#submit_form_add').on('click', function (e) {
                     e.preventDefault();
                     var uri = _base_extraweb_uri + '/project/type/insert';
@@ -18,12 +17,12 @@
                     if (response.responseJSON.status.code === 200) {
                         setTimeout(function () {
                             loadingImg('img-loading', 'stop');
-                            fnAlertStr(response.responseJSON.status.message, 'success', {timeOut: 2000});
+                            fnAlertStr(response.responseJSON.status.message, 'success', {timeOut: 2000, withHtml: true});
                         }, 1500);
                     } else {
                         setTimeout(function () {
                             loadingImg('img-loading', 'stop');
-                            fnAlertStr(response.responseJSON.status.message, 'error', {timeOut: 2000});
+                            fnAlertStr(response.responseJSON.status.message, 'error', {timeOut: 2000, withHtml: true});
                         }, 1500);
                     }
                     return false;

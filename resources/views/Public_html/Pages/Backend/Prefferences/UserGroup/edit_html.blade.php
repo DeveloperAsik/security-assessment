@@ -29,9 +29,9 @@
                                                     @if(isset($users['data']) && !empty($users['data']))
                                                         @foreach($users['data'] AS $keyword => $value)
                                                             @if($userGroup->user_id == $value->id) 
-                                                                <option value="{{$value->id}}" selected>{{$value->title}}</option>
+                                                                <option value="{{$value->id}}" selected>{{$value->name}}</option>
                                                             @else
-                                                                <option value="{{$value->id}}">{{$value->title}}</option>
+                                                                <option value="{{$value->id}}">{{$value->name}}</option>
                                                             @endif
                                                         @endforeach
                                                     @endif
@@ -45,9 +45,9 @@
                                                     @if(isset($groups) && !empty($groups))
                                                         @foreach($groups AS $keyword => $value)
                                                             @if($userGroup->group_id == $value->id) 
-                                                                <option value="{{$value->id}}" selected>{{$value->title}}</option>
+                                                                <option value="{{$value->id}}" selected>{{$value->name}}</option>
                                                             @else
-                                                                <option value="{{$value->id}}">{{$value->title}}</option>
+                                                                <option value="{{$value->id}}">{{$value->name}}</option>
                                                             @endif
                                                         @endforeach
                                                     @endif
